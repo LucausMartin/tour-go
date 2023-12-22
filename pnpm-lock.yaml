@@ -17,6 +17,9 @@ dependencies:
   react-redux:
     specifier: ^9.0.4
     version: 9.0.4(@types/react@18.2.43)(react@18.2.0)(redux@5.0.0)
+  react-router-dom:
+    specifier: ^6.21.1
+    version: 6.21.1(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
   '@commitlint/cli':
@@ -618,6 +621,11 @@ packages:
       redux: 5.0.0
       redux-thunk: 3.1.0(redux@5.0.0)
       reselect: 5.0.1
+    dev: false
+
+  /@remix-run/router@1.14.1:
+    resolution: {integrity: sha512-Qg4DMQsfPNAs88rb2xkdk03N3bjK4jgX5fR24eHCTR9q6PrhZQZ4UJBPzCHJkIpTRN1UKxx2DzjZmnC+7Lj0Ow==}
+    engines: {node: '>=14.0.0'}
     dev: false
 
   /@rollup/rollup-android-arm-eabi@4.8.0:
@@ -3217,6 +3225,29 @@ packages:
       react: 18.2.0
       redux: 5.0.0
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /react-router-dom@6.21.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-QCNrtjtDPwHDO+AO21MJd7yIcr41UetYt5jzaB9Y1UYaPTCnVuJq6S748g1dE11OQlCFIQg+RtAA1SEZIyiBeA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-router: 6.21.1(react@18.2.0)
+    dev: false
+
+  /react-router@6.21.1(react@18.2.0):
+    resolution: {integrity: sha512-W0l13YlMTm1YrpVIOpjCADJqEUpz1vm+CMo47RuFX4Ftegwm6KOYsL5G3eiE52jnJpKvzm6uB/vTKTPKM8dmkA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.1
+      react: 18.2.0
     dev: false
 
   /react@18.2.0:
