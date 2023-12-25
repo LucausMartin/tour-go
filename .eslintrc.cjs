@@ -1,4 +1,5 @@
 module.exports = {
+  exclude: ['node_modules', 'dist', 'dev-dist'],
   root: true,
   env: { browser: true, es2020: true },
   extends: [
@@ -17,5 +18,5 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "prettier/prettier": "error"
-  },
+  }
 }

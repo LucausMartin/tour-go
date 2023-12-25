@@ -27,3 +27,6 @@ vite.config.ts
 
 # 忽略 CSS 文件
 *.css
+
+# 忽略 PWA
+dev-dist/
