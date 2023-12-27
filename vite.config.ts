@@ -7,28 +7,44 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      injectRegister: 'auto',
+      registerType: 'autoUpdate',
       manifest: {
-        name: 'My PWA',
-        short_name: 'MyApp',
-        description: 'My PWA',
-        theme_color: '#242424',
+        name: "tour-go",
+        short_name: "tour",
+        description: "go go go",
+        theme_color: "#242424",
         icons: [
           {
-            src: './react.svg',
-            sizes: '192x192',
-            type: 'image/svg+xml'
+            src: "/react.svg",
+            sizes: "192x192",
+            type: "image/svg+xml",
           },
           {
-            src: './react.svg',
-            sizes: '512x512',
-            type: 'image/svg+xml'
-          }
-        ]
+            src: "/react.svg",
+            sizes: "512x512",
+            type: "image/svg+xml",
+          },
+        ],
       },
-      registerType: 'autoUpdate',
       devOptions: {
-        enabled: true
+        enabled: true,
+        type: "module",
+      },
+      workbox: {
+        runtimeCaching: [{
+          handler: 'NetworkFirst',
+          urlPattern: /\/api\/.*\/*.json/,
+          method: 'POST',
+          options: {
+            backgroundSync: {
+              name: 'myQueueName',
+              options: {
+                maxRetentionTime: 24 * 60
+              }
+            }
+          }
+        }]
       }
     }),
   ]

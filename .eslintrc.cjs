@@ -16,6 +16,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
   }
 }

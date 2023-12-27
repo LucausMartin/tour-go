@@ -9,7 +9,7 @@ export const Home: FC = () => {
   };
   return (
     <div>
-      <h1>Homee</h1>
+      <h1>Home</h1>
       <button onClick={toLogin}>Register</button>
     </div>
   );
