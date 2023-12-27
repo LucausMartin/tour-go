@@ -8,7 +8,6 @@ export default defineConfig({
     react(),
     VitePWA({
       injectRegister: 'auto',
-      registerType: 'autoUpdate',
       manifest: {
         name: "tour-go",
         short_name: "tour",
