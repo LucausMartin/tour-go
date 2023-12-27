@@ -22,6 +22,7 @@ export default defineConfig({
         short_name: "tour",
         description: "go go go",
         theme_color: "#242424",
+        background_color: "#242424",
         icons: [
           {
             src: "/react.svg",
@@ -42,7 +43,7 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [{
           handler: 'NetworkFirst',
-          urlPattern: /^http?.*/,
+          urlPattern: /^httpss?.*/,
           method: 'GET',
           options: {
             backgroundSync: {

@@ -1,23 +1,19 @@
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import './home.css';
+import { NavigateBar } from './components/Navigate/Navigate.tsx';
 
 export const Home: FC = () => {
-  // throw new Error('test');
-  const navigate = useNavigate();
-  const toLogin = () => {
-    navigate('/login');
-  };
-  const fetchInfo = () => {
-    fetch(`/api/users`).then(res => {
-      console.log(res);
-    });
-  };
+  // const navigate = useNavigate();
+  // const toLogin = () => {
+  //   navigate('/login');
+  // };
   return (
-    <div>
-      <h1>Home{}</h1>
-      <button onClick={toLogin}>Register</button>
-      <button onClick={fetchInfo}>test Service Worker</button>
-      <button>clean</button>
+    <div className="home-container">
+      {/* <button onClick={toLogin}>Register</button> */}
+      {/* <div className="home-nav">nav</div> */}
+      <NavigateBar />
+      <main className="home-main">main</main>
     </div>
   );
 };

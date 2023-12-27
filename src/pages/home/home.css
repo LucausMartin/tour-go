@@ -1,0 +1,48 @@
+.home-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100dvh;
+}
+
+.home-nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #6b3333;
+}
+
+.home-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #d2bebe;
+}
+
+/* 媒体查询屏幕小于 800px */
+@media screen and (width <= 900px) {
+  .home-container {
+    flex-direction: column;
+  }
+
+  .home-nav {
+    order: 2;
+    width: 100%;
+    height: 60px;
+  }
+
+  .home-main {
+    flex: 1;
+  }
+}
+
+/* 媒体查询屏幕小于 1400px 大于 800px */
+@media screen and (width > 900px) {
+  .home-nav {
+    width: 200px;
+  }
+
+  .home-main {
+    flex: 1;
+  }
+}
