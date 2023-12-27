@@ -7,10 +7,17 @@ export const Home: FC = () => {
   const toLogin = () => {
     navigate('/login');
   };
+  const fetchInfo = () => {
+    fetch(`/api/users`).then(res => {
+      console.log(res);
+    });
+  };
   return (
     <div>
-      <h1>Home</h1>
+      <h1>Home{}</h1>
       <button onClick={toLogin}>Register</button>
+      <button onClick={fetchInfo}>test Service Worker</button>
+      <button>clean</button>
     </div>
   );
 };
