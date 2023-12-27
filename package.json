@@ -51,6 +51,6 @@
     "stylelint-prettier": "^5.0.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.0",
-    "workbox": "^0.0.0"
+    "workbox-window": "^7.0.0"
   }
 }
