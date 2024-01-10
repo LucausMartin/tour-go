@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Cantarell,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji",BlinkMacSystemFont,"Helvetica Neue",Arial,"PingFang SC","PingFang TC","PingFang HK","Microsoft Yahei","Microsoft JhengHei";
 }
 
 body {
@@ -7,4 +8,14 @@ body {
   margin: 0;
   overscroll-behavior-y: contain;
   border: 0;
+}
+
+ul, li, ol {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+:root {
+  --main-background-color: #f1f1f1;
 }

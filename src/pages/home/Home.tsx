@@ -1,19 +1,21 @@
 import { FC } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import './home.css';
+import { useNavigate } from 'react-router-dom';
 import { NavigateBar } from './components/Navigate/Navigate.tsx';
+import { Button } from '@mui/material';
 
 export const Home: FC = () => {
-  // const navigate = useNavigate();
-  // const toLogin = () => {
-  //   navigate('/login');
-  // };
+  const navigate = useNavigate();
+  const navToLogin = () => {
+    navigate('/login');
+  };
   return (
     <div className="home-container">
-      {/* <button onClick={toLogin}>Register</button> */}
-      {/* <div className="home-nav">nav</div> */}
       <NavigateBar />
-      <main className="home-main">main</main>
+      <main className="home-main">
+        <Button onClick={navToLogin}>Login</Button>
+      </main>
     </div>
   );
 };
