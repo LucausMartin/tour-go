@@ -1,71 +1,54 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdOutlineAccountCircle, MdOutlineAccountBalance, MdOutlineReorder, MdAddCircleOutline } from 'react-icons/md';
 import './navigate.css';
+// 导航烂可点的选项
+import { NavList, NavListKeys } from './types.ts';
 
-// 枚举类型
-enum NavList {
-  discover = 'discover',
-  publish = 'publish',
-  me = 'me',
-  more = 'more'
-}
 export const NavigateBar: FC = () => {
+  // 系统主题色 light 或者 dark
   const navigate = useNavigate();
-  const [navState, setNavState] = useState<NavList>(NavList.discover);
 
-  const navToDiscover = () => {
-    setNavState(NavList.discover);
-    navigate('/');
-  };
+  // 导航路径状态
+  const [navState, setNavState] = useState<NavListKeys>(NavList[0].key);
 
-  const navToPublish = () => {
-    setNavState(NavList.publish);
-    navigate('/home/publish');
-  };
-
-  const navToMe = () => {
-    setNavState(NavList.me);
-    navigate('/home/me');
+  const navToPage = (pageRoute: NavListKeys) => {
+    return () => {
+      setNavState(pageRoute);
+      navigate(`/home/${pageRoute}`);
+    };
   };
 
   return (
-    <>
-      <nav className="home-nav">
-        <div className="nav-logo">
-          <h1>logo</h1>
-        </div>
-        <div
-          className="nav-list"
-          onClick={navToDiscover}
-          style={{
-            backgroundColor: navState === NavList.discover ? '#e1e1e1' : 'var(--main-background-color)'
-          }}
-        >
-          <div className="nav-list-content">
-            <MdOutlineAccountBalance className="nav-icon" />
-            <span>发现</span>
+    <nav className="home-nav">
+      <div className="nav-logo">
+        <h1>logo</h1>
+      </div>
+      {/* 根据 NavList 生成导航栏的 element，如要添加直接配置 NavList */}
+      {NavList.map(item =>
+        // 更多选项特殊处理
+        item.key === 'more' ? (
+          <div className="nav-more" key={item.key}>
+            <div className="nav-list-content">
+              <item.Icon className="nav-icon" />
+              <span>{item.title}</span>
+            </div>
           </div>
-        </div>
-        <div className="nav-list" onClick={navToPublish}>
-          <div className="nav-list-content">
-            <MdAddCircleOutline className="nav-icon" />
-            发布
+        ) : (
+          <div
+            key={item.key}
+            className="nav-list"
+            onClick={navToPage(item.key)}
+            style={{
+              backgroundColor: navState === item.key ? 'var(--active-background-color)' : 'var(--main-background-color)'
+            }}
+          >
+            <div className="nav-list-content">
+              <item.Icon className="nav-icon" />
+              <span>{item.title}</span>
+            </div>
           </div>
-        </div>
-        <div className="nav-list" onClick={navToMe}>
-          <div className="nav-list-content">
-            <MdOutlineAccountCircle className="nav-icon" />
-            <span>我</span>
-          </div>
-        </div>
-        <div className="nav-more">
-          <div className="nav-list-content">
-            <MdOutlineReorder className="nav-icon" />
-            <span>设置</span>
-          </div>
-        </div>
-      </nav>
-    </>
+        )
+      )}
+    </nav>
   );
 };

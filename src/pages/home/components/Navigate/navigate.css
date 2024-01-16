@@ -7,7 +7,6 @@
   cursor: pointer;
   background-color: var(--main-background-color);
   border-radius: 999px;
-  transition: background-color 0.3s ease-in-out;
 }
 
 .nav-list:hover {
@@ -17,6 +16,7 @@
 .nav-icon {
   width: 22px;
   height: 22px;
+  color: var(--main-icon-color-light);
 }
 
 .nav-more {
@@ -62,5 +62,11 @@
   .nav-list-content {
     flex-direction: column;
     margin-left: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav-icon {
+    color: var(--main-icon-color-dark);
   }
 }
