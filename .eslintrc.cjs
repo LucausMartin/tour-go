@@ -17,6 +17,15 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "prettier/prettier": "error",
-    'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
+    'import/no-unresolved': ['error', { ignore: ['^virtual:'] }]
+  },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ["@hooks", "./src/hooks"],
+        ]
+      }
+    }
   }
 }
