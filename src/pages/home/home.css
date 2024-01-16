@@ -13,7 +13,10 @@
   width: 200px;
   height: 100%;
   padding: 10px;
+  color: var(--main-font-color);
+  user-select: none;
   background-color: var(--main-background-color);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .home-main {
@@ -21,7 +24,9 @@
   flex: 1;
   flex-direction: column;
   height: 100%;
-  background-color: #d2bebe;
+  overflow: hidden;
+  background-color: var(--main-background-color);
+  border: solid 2px red;
 }
 
 /* 媒体查询屏幕小于 900px */
