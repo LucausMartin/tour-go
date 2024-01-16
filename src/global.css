@@ -17,5 +17,17 @@ ul, li, ol {
 }
 
 :root {
-  --main-background-color: #f1f1f1;
+  --main-background-color: #fff;
+  --main-font-color: #0a0a0a;
+  --active-background-color: rgb(0 0 0 / 6%);
+  --main-icon-color-light: #0a0a0a;
+  --main-icon-color-dark: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-background-color: #0a0a0a;
+    --main-font-color: #fff;
+    --active-background-color: hsl(0deg 0% 100% / 4%);
+  }
 }
