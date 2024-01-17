@@ -26,7 +26,8 @@
   height: 100%;
   overflow: hidden;
   background-color: var(--main-background-color);
-  border: solid 2px red;
+
+  /* border: solid 2px red; */
 }
 
 /* 媒体查询屏幕小于 900px */

@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: center;
   width: calc(100% - 200px);
-  padding: 20px;
+  padding: 20px 20px 10px;
   background-color: var(--main-background-color);
 }
 
@@ -45,7 +45,12 @@
   position: relative;
   left: -126px;
   font-size: 28px;
-  color: var(--main-icon-color-light);
+  color: var(--main-icon-color);
+}
+
+.discover-content {
+  position: relative;
+  top: 70px;
 }
 
 @media screen and (width <= 900px) {
@@ -60,11 +65,5 @@
 
   .discover-search-icon {
     left: -26px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .discover-search-icon {
-    color: var(--main-icon-color-dark);
   }
 }

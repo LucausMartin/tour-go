@@ -1,0 +1,325 @@
+.button {
+  display: inline-block;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.btn-inner {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  display: inline-block;
+  width: 150px;
+  height: 66px;
+  overflow: hidden;
+  line-height: 0;
+  background: #1c80da;
+  border-radius: 100px;
+  box-shadow: inset 0 2px 6px #000, 0 0 3px rgb(0 0 0 / 60%);
+  transition: all  0.6s ease-in-out;
+  transform: scale(0.45);
+}
+
+.circle {
+  position: absolute;
+  top: 6px; left: 6px;
+  z-index: 2;
+  width: 54px;
+  height: 54px;
+  overflow: hidden;
+  background: #ffdd08;
+  border-radius: 100px;
+  box-shadow: 0 0 5px rgb(0 0 0 / 60%), inset -0.5px -1px 3px rgb(0 0 0 / 60%), inset 1px 1px 3px rgb(255 255 255 / 80%);
+  transition: all  0.6s ease-in-out;
+}
+
+.circle .circle-night {
+  position: absolute;
+  top: 0; 
+  left: 101%;
+  width: 100%;
+  height: 100%;
+  background: #c7d0da;
+  border-radius: 100px;
+  box-shadow: 0 0 5px rgb(0 0 0 / 60%), inset -0.5px -1px 2px rgb(0 0 0 / 60%), inset 1px 1px 2px rgb(255 255 255 / 80%);
+  transition: all  0.6s ease-in-out;
+}
+
+.circle .crater {
+  position: absolute;
+  top: 12%;
+  left: 44%;
+  width: 25%;
+  height: 25%;
+  background: #909baf;
+  border-radius: 100px;
+}
+
+.circle .crater2 {
+  top: 42%;
+  left: 16%;
+  width: 34%;
+  height: 34%;
+}
+
+.circle .crater3 {
+  top: 62%;
+  left: 63%;
+  width: 19%;
+  height: 19%;
+}
+
+.halo-box {
+  position: absolute;
+  top: 33px;
+  left: 33px;
+  z-index: 1;
+  width: 0; height: 0;
+  transition: all  0.6s ease-in-out;
+}
+
+.halo-box .halo {
+  position: absolute; top: 50%;
+  left: 50%;
+  width: 92.4px;
+  height: 92.4px;
+  background: #fff;
+  border-radius: 1000px;
+  opacity: 0.1;
+  transition: all  0.6s ease-in-out;
+  transform: translate(-50%, -50%);
+}
+
+.halo-box .halo2 {
+  width: 117.4px;
+  height: 117.4px;
+}
+
+.halo-box .halo3 {
+  width: 142.4px;
+  height: 142.4px;
+}
+
+.clouds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  transition: all  0.6s ease-in-out;
+  transition-delay: 0s;
+}
+
+.clouds .cloud {
+  position: absolute;
+  top: -17%;
+  left: 84%;
+  width: 59.4px;
+  height: 59.4px;
+  background: #fff;
+  border-radius: 100px;
+}
+
+.clouds2 {
+  top: 19%;
+  left: -5%;
+  opacity: 1;
+  transition-delay:  0.3s;
+  transform: rotate(5deg);
+}
+
+.clouds2 .cloud {
+  top: 2%;
+  left: 92%;
+  
+}
+
+.clouds2 .cloud2 {
+  top: 39%;
+  left: 69%;
+}
+
+.clouds .cloud2 {
+  top: 39%;
+  left: 69%;
+  width: 44.88px;
+  height: 44.88px;
+}
+
+.clouds .cloud3 {
+  top: 47%;
+  left: 54%;
+  width: 48.18px;
+  height: 48.18px;
+}
+
+.clouds .cloud4 {
+  top: 64%;
+  left: 49.7%;
+  width: 33px;
+  height: 33px;
+}
+
+.clouds .cloud5 {
+  top: 64%;
+  left: 32%;
+  width: 37.62px;
+  height: 37.62px;
+}
+
+.clouds .cloud6 {
+  top: 81%;
+  left: 13%;
+  width: 48.18px;
+  height: 48.18px;
+}
+
+.clouds .cloud7 {
+  top: 85%;
+  left: 7%;
+  width: 29.7px;
+  height: 29.7px;
+}
+
+.stars {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all  0.6s ease-in-out;
+  
+}
+
+.stars .star {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  display: inline-block;
+  width: 10px;
+  transition: all  0.6s ease-in-out;
+  transform: translateY(-20px);
+}
+
+.stars .star2 {
+  top: 30%;
+  left: 10%;
+  width: 4px;
+  transition-delay: 0.1s;
+}
+
+.stars .star3 {
+  top: 48%;
+  left: 20%;
+  width: 3px;
+  transition-delay: 0.15s;
+}
+
+.stars .star4 {
+  top: 76%;
+  left: 11%;
+  width: 4px;
+  transition-delay: 0.24s;
+}
+
+.stars .star5 {
+  top: 71%;
+  left: 16%;
+  width: 4px;
+  transition-delay: 0.20s;
+}
+
+.stars .star6 {
+  top: 79%;
+  left: 23%;
+  width: 5px;
+  transition-delay: 0.26s;
+}
+
+.stars .star7 {
+  top: 26%;
+  left: 44%;
+  width: 4px;
+  transition-delay: 0.04s;
+}
+
+.stars .star8 {
+  top: 50%;
+  left: 37%;
+  width: 4px;
+  transition-delay: 0.14s;
+}
+
+.stars .star9 {
+  top: 68%;
+  left: 44%;
+  width: 6px;
+  transition-delay: 0.12s;
+}
+
+.stars .star10 {
+  top: 37%;
+  left: 52%;
+  width: 8px;
+  transition-delay: 0.05s;
+}
+
+.night .btn-inner {
+  background: #252525;
+}
+
+.night .circle {
+  left: 90px;
+}
+
+.night .circle .circle-night {
+  left: 0;
+}
+
+.night .halo-box {
+  left: 122px;
+}
+
+.night .halo-box .halo {
+  opacity: 0.13;
+}
+
+.night .clouds {
+  top: 100%;
+  transition-delay:  0.3s;
+}
+
+.night .clouds2 {
+  transition-delay: 0s;
+}
+
+.night .stars {
+  top: 0;
+}
+
+.night .stars .star {
+  transform: translateY(0);
+}
+
+.button:hover .circle {
+  transform: translateX(5px);
+}
+
+.button:hover .halo-box {
+  transform: translateX(5px);
+}
+
+.night:hover  .circle {
+  transform: translateX(-5px);
+}
+
+.night:hover .halo-box {
+  transform: translateX(-5px);
+} 
+
+@media screen and (width <= 900px) {
+  .button {
+    display: none;
+  }
+}
