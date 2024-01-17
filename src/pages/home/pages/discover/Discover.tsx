@@ -2,10 +2,19 @@ import { FC } from 'react';
 import './discover.css';
 import { MdOutlineSearch } from 'react-icons/md';
 
+const a = [...new Array(200).keys()];
+
 const Discover: FC = () => {
   return (
     <div className="discover-container">
       <DiscoverSearch></DiscoverSearch>
+      {a.map(item => {
+        return (
+          <div key={item} style={{ width: '200px', height: '400px' }}>
+            123
+          </div>
+        );
+      })}
     </div>
   );
 };

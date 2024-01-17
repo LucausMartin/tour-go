@@ -5,18 +5,30 @@
   height: 100%;
   padding: 20px;
   overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.discover-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
 }
 
 .discover-search-container {
+  position: fixed;
+  top: 0;
+  left: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: calc(100% - 200px);
+  padding: 20px;
+  background-color: var(--main-background-color);
 }
 
 .discover-search {
   position: relative;
-  left: -100px;
+  left: -86px;
   width: 460px;
   height: 40px;
   padding: 0 50px 0 20px;
@@ -31,18 +43,23 @@
 
 .discover-search-icon {
   position: relative;
-  left: -140px;
-  font-size: 25px;
+  left: -126px;
+  font-size: 28px;
   color: var(--main-icon-color-light);
 }
 
 @media screen and (width <= 900px) {
-  .discover-search {
+  .discover-search-container {
     left: 0;
+    width: 100%;
+  }
+
+  .discover-search {
+    left: 14px;
   }
 
   .discover-search-icon {
-    left: -40px;
+    left: -26px;
   }
 }
 
