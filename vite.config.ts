@@ -7,7 +7,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   resolve: {
     alias: {
-      '@hooks': join(__dirname, 'src/hooks')
+      '@hooks': join(__dirname, 'src/hooks'),
+      '@components': join(__dirname, 'src/components')
     }
   },
   server: {

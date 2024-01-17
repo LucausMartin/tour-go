@@ -24,6 +24,7 @@ module.exports = {
       alias: {
         map: [
           ["@hooks", "./src/hooks"],
+          ["@components", "./src/components"]
         ]
       }
     }
