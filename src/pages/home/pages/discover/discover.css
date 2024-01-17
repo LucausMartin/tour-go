@@ -19,7 +19,7 @@
   left: -100px;
   width: 460px;
   height: 40px;
-  padding: 0 20px;
+  padding: 0 50px 0 20px;
   font-size: 16px;
   line-height: 120%;
   caret-color: #ff2442;
@@ -42,7 +42,7 @@
   }
 
   .discover-search-icon {
-    left: 0;
+    left: -40px;
   }
 }
 
