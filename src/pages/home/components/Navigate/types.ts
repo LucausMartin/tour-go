@@ -1,33 +1,44 @@
-import { MdOutlineAccountCircle, MdOutlineAccountBalance, MdOutlineReorder, MdAddCircleOutline } from 'react-icons/md';
+import {
+  MdOutlineAccountCircle,
+  MdOutlineAccountBalance,
+  MdOutlineReorder,
+  MdAddCircleOutline,
+  MdOutlineMessage
+} from 'react-icons/md';
 import type { IconType } from 'react-icons';
 
-export type NavListKeys = 'discover' | 'publish' | 'me' | 'more';
+export type NavListKeys = 'discover' | 'publish' | 'me' | 'more' | 'message';
 
 interface NavItem {
   title: string;
-  Icon: IconType;
+  icon: IconType;
   key: NavListKeys;
 }
 
 export const NavList: NavItem[] = [
   {
     title: '发现',
-    Icon: MdOutlineAccountBalance,
+    icon: MdOutlineAccountBalance,
     key: 'discover'
   },
   {
     title: '发布',
-    Icon: MdAddCircleOutline,
+    icon: MdAddCircleOutline,
     key: 'publish'
   },
   {
+    title: '消息',
+    icon: MdOutlineMessage,
+    key: 'message'
+  },
+  {
     title: '我',
-    Icon: MdOutlineAccountCircle,
+    icon: MdOutlineAccountCircle,
     key: 'me'
   },
   {
     title: '更多',
-    Icon: MdOutlineReorder,
+    icon: MdOutlineReorder,
     key: 'more'
   }
 ];

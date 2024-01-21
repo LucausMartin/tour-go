@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import './navigate.css';
 // 导航烂可点的选项
 import { NavList, NavListKeys } from './types.ts';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 export const NavigateBar: FC = () => {
+  const windowSize = useWindowSize();
   // 系统主题色 light 或者 dark
   const navigate = useNavigate();
 
@@ -27,9 +29,15 @@ export const NavigateBar: FC = () => {
       {NavList.map(item =>
         // 更多选项特殊处理
         item.key === 'more' ? (
-          <div className="nav-more" key={item.key}>
+          <div
+            className="nav-more"
+            key={item.key}
+            style={{
+              backgroundColor: navState === item.key ? 'var(--active-background-color)' : ''
+            }}
+          >
             <div className="nav-list-content">
-              <item.Icon className="nav-icon" />
+              <item.icon className="nav-icon" />
               <span>{item.title}</span>
             </div>
           </div>
@@ -39,11 +47,24 @@ export const NavigateBar: FC = () => {
             className="nav-list"
             onClick={navToPage(item.key)}
             style={{
-              backgroundColor: navState === item.key ? 'var(--active-background-color)' : 'var(--main-background-color)'
+              backgroundColor:
+                windowSize.width && windowSize.width >= 900 && navState === item.key
+                  ? 'var(--active-background-color)'
+                  : '',
+              color:
+                windowSize.width && windowSize.width < 900 && navState === item.key ? 'var(--active-font-color)' : ''
             }}
           >
             <div className="nav-list-content">
-              <item.Icon className="nav-icon" />
+              <item.icon
+                className="nav-icon"
+                style={{
+                  color:
+                    windowSize.width && windowSize.width < 900 && navState === item.key
+                      ? 'var(--active-font-color)'
+                      : ''
+                }}
+              />
               <span>{item.title}</span>
             </div>
           </div>

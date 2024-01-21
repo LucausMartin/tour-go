@@ -317,9 +317,3 @@
 .night:hover .halo-box {
   transform: translateX(-5px);
 } 
-
-@media screen and (width <= 900px) {
-  .button {
-    display: none;
-  }
-}

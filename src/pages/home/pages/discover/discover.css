@@ -4,14 +4,6 @@
   width: 100%;
   height: 100%;
   padding: 20px;
-  overflow: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+, edge */
-}
-
-.discover-container::-webkit-scrollbar {
-  display: none;
-  width: 0;
 }
 
 .discover-search-container {
@@ -22,7 +14,7 @@
   align-items: center;
   justify-content: center;
   width: calc(100% - 200px);
-  padding: 20px 20px 10px;
+  padding: 20px;
   background-color: var(--main-background-color);
 }
 
@@ -48,22 +40,106 @@
   color: var(--main-icon-color);
 }
 
-.discover-content {
-  position: relative;
-  top: 70px;
+.discover-kind {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
 }
 
-@media screen and (width <= 900px) {
-  .discover-search-container {
-    left: 0;
-    width: 100%;
+.discover-kind::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.discover-kind-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 14px;
+  color: var(--inactive-font-color);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  background-color: var(--main-background-color);
+  border-radius: 20px;
+}
+
+.discover-kind-item:hover {
+  background-color: var(--active-background-color);
+}
+
+.discover-content {
+  flex: 1;
+  overflow: auto;
+  background-color: var(--main-background-color);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.discover-content::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.discover-top-bar {
+  position: fixed;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 40px;
+  border-bottom: solid 1px var(--active-background-color);
+}
+
+.discover-top-bar-list {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  align-items: center;
+  width: calc(100% - 60px);
+  height: 100%;
+  padding-left: 8px;
+}
+
+.discover-top-bar-list-item {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: var(--inactive-font-color);
+}
+
+.discover-top-bar-list-item:hover {
+  font-weight: 600;
+  color: var(--main-font-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+.discover-top-bar-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 100%;
+}
+
+.discover-top-bar-search-icon {
+  width: 30px;
+  height: 30px;
+}
+
+@media screen and (width < 900px) {
+  .discover-container {
+    padding: 8px 8px 0;
   }
 
-  .discover-search {
-    left: 14px;
-  }
-
-  .discover-search-icon {
-    left: -26px;
+  .discover-content {
+    position: relative;
+    top: 48px;
   }
 }

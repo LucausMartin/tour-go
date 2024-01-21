@@ -11,8 +11,9 @@ function useTheme() {
       setTimeout(() => {
         rootStyle.setProperty('--main-background-color', '#0a0a0a');
         rootStyle.setProperty('--main-font-color', '#fff');
-        rootStyle.setProperty('--active-background-color', 'hsl(0deg 0% 100% / 4%)');
+        rootStyle.setProperty('--active-background-color', 'hsl(0deg 0% 100% / 10%)');
         rootStyle.setProperty('--main-icon-color', '#fff');
+        rootStyle.setProperty('--inactive-font-color', 'rgb(255 255 255 / 70%)');
       }, 300);
     } else {
       setThemeName('light');
@@ -21,6 +22,7 @@ function useTheme() {
         rootStyle.setProperty('--main-font-color', '#0a0a0a');
         rootStyle.setProperty('--active-background-color', 'rgb(0 0 0 / 6%)');
         rootStyle.setProperty('--main-icon-color', '#0a0a0a');
+        rootStyle.setProperty('--inactive-font-color', 'rgb(51 51 51 / 70%)');
       }, 300);
     }
   };
@@ -38,8 +40,9 @@ function useTheme() {
         setTimeout(() => {
           rootStyle.setProperty('--main-background-color', '#0a0a0a');
           rootStyle.setProperty('--main-font-color', '#fff');
-          rootStyle.setProperty('--active-background-color', 'hsl(0deg 0% 100% / 4%)');
+          rootStyle.setProperty('--active-background-color', 'hsl(0deg 0% 100% / 10%)');
           rootStyle.setProperty('--main-icon-color', '#fff');
+          rootStyle.setProperty('--inactive-font-color', 'rgb(255 255 255 / 70%)');
         }, 300);
       } else {
         setThemeName('light');
@@ -48,6 +51,7 @@ function useTheme() {
           rootStyle.setProperty('--main-font-color', '#0a0a0a');
           rootStyle.setProperty('--active-background-color', 'rgb(0 0 0 / 6%)');
           rootStyle.setProperty('--main-icon-color', '#0a0a0a');
+          rootStyle.setProperty('--inactive-font-color', 'rgb(51 51 51 / 70%)');
         }, 300);
       }
     });
