@@ -6,6 +6,7 @@ import { Space } from '@components/Space/Space.tsx';
 import { KindList, KindKeys } from './type.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useMatchLocation } from '@hooks/useMatchLocation.ts';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
@@ -41,12 +42,11 @@ const DiscoverSearch: FC = () => {
 };
 
 const DiscoverKind: FC = () => {
+  const location = useMatchLocation('articleKind');
   const naivgate = useNavigate();
-  const [kindState, setKindState] = useState<KindKeys>(KindList[0].key);
 
   const changeKind = (kindKey: KindKeys) => {
     return () => {
-      setKindState(kindKey);
       naivgate(`${kindKey}`);
     };
   };
@@ -59,9 +59,9 @@ const DiscoverKind: FC = () => {
             key={item.key}
             onClick={changeKind(item.key)}
             style={{
-              backgroundColor: kindState === item.key ? 'var(--active-background-color)' : '',
-              color: kindState === item.key ? 'var(--active-font-color)' : '',
-              fontWeight: kindState === item.key ? '600' : ''
+              backgroundColor: location === item.key ? 'var(--active-background-color)' : '',
+              color: location === item.key ? 'var(--active-font-color)' : '',
+              fontWeight: location === item.key ? '600' : ''
             }}
             className="discover-kind-item"
           >
@@ -79,6 +79,8 @@ const DiscoverContent: FC = () => {
 };
 
 const DiscoverTopBar: FC = () => {
+  const location = useMatchLocation('articleKind');
+
   const naivgate = useNavigate();
 
   const kindListElementWidth = KindList.reduce((pre, cur) => {
@@ -88,11 +90,9 @@ const DiscoverTopBar: FC = () => {
   const [endState, setEndState] = useState(false);
   const [startState, setStartState] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
-  const [kindState, setKindState] = useState<KindKeys>(KindList[0].key);
 
   const changeKind = (kindKey: KindKeys) => {
     return () => {
-      setKindState(kindKey);
       naivgate(`${kindKey}`);
     };
   };
@@ -127,8 +127,8 @@ const DiscoverTopBar: FC = () => {
             className="discover-top-bar-list-item"
             onClick={changeKind(item.key)}
             style={{
-              fontWeight: kindState === item.key ? '600' : '',
-              color: kindState === item.key ? 'var(--active-font-color)' : ''
+              fontWeight: location === item.key ? '600' : '',
+              color: location === item.key ? 'var(--active-font-color)' : ''
             }}
           >
             {item.title}

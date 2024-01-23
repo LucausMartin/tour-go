@@ -1,22 +1,23 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './navigate.css';
 // 导航烂可点的选项
 import { NavList, NavListKeys } from './types.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
+import { useMatchLocation } from '@hooks/useMatchLocation.ts';
 
 export const NavigateBar: FC = () => {
-  const windowSize = useWindowSize();
-  // 系统主题色 light 或者 dark
-  const navigate = useNavigate();
+  const location = useMatchLocation('navigate');
 
-  // 导航路径状态
-  const [navState, setNavState] = useState<NavListKeys>(NavList[0].key);
+  const windowSize = useWindowSize();
+  const navigate = useNavigate();
 
   const navToPage = (pageRoute: NavListKeys) => {
     return () => {
-      setNavState(pageRoute);
       navigate(`/home/${pageRoute}`);
+      if (pageRoute === 'discover') {
+        navigate(`/home/${pageRoute}/recommand`);
+      }
     };
   };
 
@@ -33,7 +34,7 @@ export const NavigateBar: FC = () => {
             className="nav-more"
             key={item.key}
             style={{
-              backgroundColor: navState === item.key ? 'var(--active-background-color)' : ''
+              backgroundColor: location === item.key ? 'var(--active-background-color)' : ''
             }}
           >
             <div className="nav-list-content">
@@ -48,11 +49,11 @@ export const NavigateBar: FC = () => {
             onClick={navToPage(item.key)}
             style={{
               backgroundColor:
-                windowSize.width && windowSize.width >= 900 && navState === item.key
+                windowSize.width && windowSize.width >= 900 && location === item.key
                   ? 'var(--active-background-color)'
                   : '',
               color:
-                windowSize.width && windowSize.width < 900 && navState === item.key ? 'var(--active-font-color)' : ''
+                windowSize.width && windowSize.width < 900 && location === item.key ? 'var(--active-font-color)' : ''
             }}
           >
             <div className="nav-list-content">
@@ -60,7 +61,7 @@ export const NavigateBar: FC = () => {
                 className="nav-icon"
                 style={{
                   color:
-                    windowSize.width && windowSize.width < 900 && navState === item.key
+                    windowSize.width && windowSize.width < 900 && location === item.key
                       ? 'var(--active-font-color)'
                       : ''
                 }}
