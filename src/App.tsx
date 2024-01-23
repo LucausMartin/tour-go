@@ -1,10 +1,13 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 function App() {
+  const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
-    navigate('/home/discover');
-  }, [navigate]);
+    if (location.pathname === '/') {
+      navigate('/home/discover/recommand');
+    }
+  }, [navigate, location.pathname]);
 
   return (
     <>

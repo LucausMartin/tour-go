@@ -24,7 +24,8 @@ ul, li, ol {
   --main-icon-color: #0a0a0a;
   --active-font-color: #ff2442;
 
-  background-color: var(--main-background-color);
+  color: var(--main-font-color);
+  background-color: var(--main-background-color)
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,10 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import './discover.css';
 import { MdOutlineSearch } from 'react-icons/md';
 import { ThemeButton } from '@components/ThemeButton/ThemeButton.tsx';
 import { Space } from '@components/Space/Space.tsx';
 import { KindList, KindKeys } from './type.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
@@ -40,11 +41,13 @@ const DiscoverSearch: FC = () => {
 };
 
 const DiscoverKind: FC = () => {
+  const naivgate = useNavigate();
   const [kindState, setKindState] = useState<KindKeys>(KindList[0].key);
 
-  const changeKind = (kind: KindKeys) => {
+  const changeKind = (kindKey: KindKeys) => {
     return () => {
-      setKindState(kind);
+      setKindState(kindKey);
+      naivgate(`${kindKey}`);
     };
   };
 
@@ -57,7 +60,7 @@ const DiscoverKind: FC = () => {
             onClick={changeKind(item.key)}
             style={{
               backgroundColor: kindState === item.key ? 'var(--active-background-color)' : '',
-              color: kindState === item.key ? 'var(--main-font-color)' : '',
+              color: kindState === item.key ? 'var(--active-font-color)' : '',
               fontWeight: kindState === item.key ? '600' : ''
             }}
             className="discover-kind-item"
@@ -71,90 +74,53 @@ const DiscoverKind: FC = () => {
 };
 
 const DiscoverContent: FC = () => {
-  return (
-    <div className="discover-content">
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-      <div>123</div>
-    </div>
-  );
+  const param = useParams();
+  return <div className="discover-content">{param.kind}</div>;
 };
 
 const DiscoverTopBar: FC = () => {
+  const naivgate = useNavigate();
+
+  const kindListElementWidth = KindList.reduce((pre, cur) => {
+    return pre + cur.title.length * 16 + 18;
+  }, -18);
+  const windowSize = useWindowSize();
+  const [endState, setEndState] = useState(false);
+  const [startState, setStartState] = useState(true);
+  const rootRef = useRef<HTMLDivElement>(null);
   const [kindState, setKindState] = useState<KindKeys>(KindList[0].key);
 
-  const changeKind = (kind: KindKeys) => {
+  const changeKind = (kindKey: KindKeys) => {
     return () => {
-      setKindState(kind);
+      setKindState(kindKey);
+      naivgate(`${kindKey}`);
     };
+  };
+
+  const onScrollHandle = () => {
+    const scrollLeft = rootRef.current?.scrollLeft;
+    const scrollWidth = rootRef.current?.scrollWidth;
+    const clientWidth = rootRef.current?.clientWidth;
+    if (scrollLeft === 0) {
+      setStartState(true);
+    } else {
+      setStartState(false);
+    }
+    if (scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth >= scrollWidth) {
+      setEndState(true);
+    } else {
+      setEndState(false);
+    }
   };
 
   return (
     <div className="discover-top-bar">
-      <div className="discover-top-bar-list">
+      <div ref={rootRef} id="rootRef" className="discover-top-bar-list" onScrollCapture={onScrollHandle}>
+        {windowSize.width && windowSize.width - 65 <= kindListElementWidth ? (
+          startState ? null : (
+            <div className="discover-top-bar-list-left-mask"></div>
+          )
+        ) : null}
         {KindList.map(item => (
           <div
             key={item.key}
@@ -162,12 +128,26 @@ const DiscoverTopBar: FC = () => {
             onClick={changeKind(item.key)}
             style={{
               fontWeight: kindState === item.key ? '600' : '',
-              color: kindState === item.key ? 'var(--main-font-color)' : ''
+              color: kindState === item.key ? 'var(--active-font-color)' : ''
             }}
           >
             {item.title}
           </div>
         ))}
+        <div
+          className="discover-top-bar-list-right-mask"
+          style={{
+            display:
+              windowSize.width && windowSize.width - 65 <= kindListElementWidth
+                ? endState
+                  ? 'none'
+                  : 'block'
+                : 'none',
+            left:
+              windowSize.width && windowSize.width - 65 <= kindListElementWidth ? '' : kindListElementWidth - 22 + 'px',
+            right: windowSize.width && windowSize.width - 65 <= kindListElementWidth ? '57px' : ''
+          }}
+        ></div>
       </div>
       <div className="discover-top-bar-search">
         <MdOutlineSearch className="discover-top-bar-search-icon" />
@@ -175,4 +155,4 @@ const DiscoverTopBar: FC = () => {
     </div>
   );
 };
-export { Discover };
+export { Discover, DiscoverContent };

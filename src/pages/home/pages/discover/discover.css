@@ -103,7 +103,15 @@
   align-items: center;
   width: calc(100% - 60px);
   height: 100%;
-  padding-left: 8px;
+  margin-left: 8px;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.discover-top-bar-list::-webkit-scrollbar {
+  display: none;
+  width: 0;
 }
 
 .discover-top-bar-list-item {
@@ -111,11 +119,12 @@
   align-items: center;
   height: 100%;
   color: var(--inactive-font-color);
+  white-space: nowrap;
 }
 
 .discover-top-bar-list-item:hover {
   font-weight: 600;
-  color: var(--main-font-color);
+  color: var(--active-font-color);
   cursor: pointer;
   user-select: none;
 }
@@ -131,6 +140,22 @@
 .discover-top-bar-search-icon {
   width: 30px;
   height: 30px;
+  color: var(--main-icon-color)
+}
+
+.discover-top-bar-list-left-mask {
+  position: absolute;
+  left: 6px;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to right, rgb(255 255 255 / 100%), rgb(255 255 255 / 0%));
+}
+
+.discover-top-bar-list-right-mask {
+  position: absolute;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to left, rgb(255 255 255 / 100%), rgb(255 255 255 / 0%));
 }
 
 @media screen and (width < 900px) {
@@ -141,5 +166,15 @@
   .discover-content {
     position: relative;
     top: 48px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .discover-top-bar-list-left-mask {
+    background: linear-gradient(to right, rgb(0 0 0 / 100%), rgb(255 255 255 / 0%));
+  }
+
+  .discover-top-bar-list-right-mask {
+    background: linear-gradient(to left, rgb(0 0 0 / 100%), rgb(255 255 255 / 0%));
   }
 }
