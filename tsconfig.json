@@ -2,10 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@hooks/*": ["src/hooks/*"],
-      "@components/*": ["src/components/*"],
-      "@common/*": ["src/common/*"],
-      "@store/*": ["src/store/*"]
+      "@myHooks/*": ["src/hooks/*"],
+      "@myComponents/*": ["src/components/*"],
+      "@myCommon/*": ["src/common/*"],
+      "@myStore/*": ["src/store/*"],
+      "@myTypes/*": ["src/types/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

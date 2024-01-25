@@ -7,10 +7,11 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   resolve: {
     alias: {
-      '@hooks': join(__dirname, 'src/hooks'),
-      '@components': join(__dirname, 'src/components'),
-      '@common': join(__dirname, 'src/common'),
-      '@store': join(__dirname, 'src/store'),
+      '@myHooks': join(__dirname, 'src/hooks'),
+      '@myComponents': join(__dirname, 'src/components'),
+      '@myCommon': join(__dirname, 'src/common'),
+      '@myStore': join(__dirname, 'src/store'),
+      '@myTypes': join(__dirname, 'src/types'),
     }
   },
   server: {
