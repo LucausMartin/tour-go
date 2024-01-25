@@ -1,18 +1,19 @@
 import { FC, useEffect, useState } from 'react';
 import './themeButton.css';
-import useTheme from '@hooks/useTheme.ts';
+import { useTheme } from '@myHooks/useTheme.ts';
 
-const ThemeButton: FC = () => {
+const ThemeButton: FC<{ display: boolean }> = ({ display }) => {
   const theme = useTheme();
+  console.log(theme);
   const [buttonClassName, setButtonClassName] = useState('button');
 
   useEffect(() => {
-    if (theme.isDarkMode) {
+    if (theme.themeName === 'dark') {
       setButtonClassName('button night');
-    } else {
+    } else if (theme.themeName === 'light') {
       setButtonClassName('button');
     }
-  }, [theme.isDarkMode]);
+  }, [theme]);
 
   const changeClassName = () => {
     if (buttonClassName === 'button') {
@@ -25,7 +26,12 @@ const ThemeButton: FC = () => {
   };
 
   return (
-    <span className={buttonClassName} id="button" onClick={changeClassName}>
+    <span
+      className={buttonClassName}
+      id="button"
+      style={{ display: display ? 'block' : 'none' }}
+      onClick={changeClassName}
+    >
       <span className="btn-inner">
         <span className="circle">
           <span className="circle-night">
