@@ -4,7 +4,7 @@ import './navigate.css';
 // 导航烂可点的选项
 import { NavList, NavListKeys } from './types.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useMatchLocation } from '@hooks/useMatchLocation.ts';
+import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
 
 export const NavigateBar: FC = () => {
   const location = useMatchLocation('navigate');

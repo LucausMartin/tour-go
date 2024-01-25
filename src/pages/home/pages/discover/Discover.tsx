@@ -1,32 +1,36 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import './discover.css';
 import { MdOutlineSearch } from 'react-icons/md';
-import { ThemeButton } from '@components/ThemeButton/ThemeButton.tsx';
-import { Space } from '@components/Space/Space.tsx';
+import { ThemeButton } from '@myComponents/ThemeButton/ThemeButton.tsx';
+import { Space } from '@myComponents/Space/Space.tsx';
 import { KindList, KindKeys } from './type.ts';
+import { ReactSetState } from '@myTypes/type.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMatchLocation } from '@hooks/useMatchLocation.ts';
+import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
+import { daley } from '@myCommon/daley.ts';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
 
 const Discover: FC = () => {
   const windowSize = useWindowSize();
+  const [searchPageShow, setSearchPageShow] = useState(false);
   return (
     <div className="discover-container">
       {windowSize.width && windowSize.width >= 900 ? (
         <>
           <DiscoverSearch />
-          <ThemeButton />
           <Space width="100%" height="60px" />
           <DiscoverKind />
         </>
       ) : (
         <>
-          <DiscoverTopBar></DiscoverTopBar>
+          <DiscoverTopBar setSearchPageShow={setSearchPageShow} />
+          <SearchPage searchPageShow={searchPageShow} setSearchPageShow={setSearchPageShow} />
         </>
       )}
+      <ThemeButton display={windowSize.width && windowSize.width >= 900 ? true : false} />
       <DiscoverContent />
     </div>
   );
@@ -74,19 +78,18 @@ const DiscoverKind: FC = () => {
   );
 };
 
-const DiscoverContent: FC = () => {
-  const param = useParams();
-  return <div className="discover-content">{param.kind}</div>;
-};
-
-const DiscoverTopBar: FC = () => {
+const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ setSearchPageShow }) => {
   const location = useMatchLocation('articleKind');
-
   const naivgate = useNavigate();
+  const kindListElementWidth = useRef<number>(0);
 
-  const kindListElementWidth = KindList.reduce((pre, cur) => {
-    return pre + cur.title.length * 16 + 18;
-  }, -18);
+  useEffect(() => {
+    // 计算类别列表UI的宽度
+    kindListElementWidth.current = KindList.reduce((pre, cur) => {
+      return pre + cur.title.length * 16 + 18;
+    }, -18);
+  }, []);
+
   const windowSize = useWindowSize();
   const [endState, setEndState] = useState(false);
   const [startState, setStartState] = useState(true);
@@ -117,7 +120,7 @@ const DiscoverTopBar: FC = () => {
   return (
     <div className="discover-top-bar">
       <div ref={rootRef} id="rootRef" className="discover-top-bar-list" onScrollCapture={onScrollHandle}>
-        {windowSize.width && windowSize.width - 65 <= kindListElementWidth ? (
+        {windowSize.width && windowSize.width - 65 <= kindListElementWidth.current ? (
           startState ? null : (
             <div className="discover-top-bar-list-left-mask"></div>
           )
@@ -139,21 +142,59 @@ const DiscoverTopBar: FC = () => {
           className="discover-top-bar-list-right-mask"
           style={{
             display:
-              windowSize.width && windowSize.width - 65 <= kindListElementWidth
+              windowSize.width && windowSize.width - 65 <= kindListElementWidth.current
                 ? endState
                   ? 'none'
                   : 'block'
                 : 'none',
             left:
-              windowSize.width && windowSize.width - 65 <= kindListElementWidth ? '' : kindListElementWidth - 22 + 'px',
-            right: windowSize.width && windowSize.width - 65 <= kindListElementWidth ? '57px' : ''
+              windowSize.width && windowSize.width - 65 <= kindListElementWidth.current
+                ? ''
+                : kindListElementWidth.current - 22 + 'px',
+            right: windowSize.width && windowSize.width - 65 <= kindListElementWidth.current ? '57px' : ''
           }}
         ></div>
       </div>
-      <div className="discover-top-bar-search">
+      <div className="discover-top-bar-search" onClick={() => setSearchPageShow(true)}>
         <MdOutlineSearch className="discover-top-bar-search-icon" />
       </div>
     </div>
   );
 };
+
+const SearchPage: FC<{ searchPageShow: boolean; setSearchPageShow: ReactSetState<boolean> }> = ({
+  searchPageShow,
+  setSearchPageShow
+}) => {
+  const [daleyAnimation, setdaleyAnimation] = useState(false);
+
+  useEffect(() => {
+    if (!searchPageShow) {
+      daley(180).then(() => {
+        setdaleyAnimation(false);
+      });
+    } else {
+      setdaleyAnimation(true);
+    }
+  }, [searchPageShow]);
+
+  return (
+    <div
+      style={{
+        opacity: searchPageShow ? '1' : '0',
+        zIndex: daleyAnimation ? '1' : '-1'
+      }}
+      className="discover-search-page-containre"
+    >
+      search
+      <button onClick={() => setSearchPageShow(false)}>close</button>
+    </div>
+  );
+};
+
+const DiscoverContent: FC = () => {
+  const param = useParams();
+  return <div className="discover-content">{param.kind}</div>;
+};
+
 export { Discover, DiscoverContent };
