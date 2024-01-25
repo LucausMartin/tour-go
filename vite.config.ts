@@ -8,7 +8,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@hooks': join(__dirname, 'src/hooks'),
-      '@components': join(__dirname, 'src/components')
+      '@components': join(__dirname, 'src/components'),
+      '@common': join(__dirname, 'src/common'),
+      '@store': join(__dirname, 'src/store'),
     }
   },
   server: {
