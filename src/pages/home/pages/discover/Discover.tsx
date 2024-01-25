@@ -42,6 +42,7 @@ const DiscoverSearch: FC = () => {
 };
 
 const DiscoverKind: FC = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const location = useMatchLocation('articleKind');
   const naivgate = useNavigate();
 
@@ -52,7 +53,7 @@ const DiscoverKind: FC = () => {
   };
 
   return (
-    <div className="discover-kind">
+    <div ref={scrollRef} className="discover-kind">
       {KindList.map(item => {
         return (
           <div

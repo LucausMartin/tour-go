@@ -13,6 +13,7 @@
   width: 200px;
   height: 100%;
   padding: 10px;
+  overflow: auto;
   color: var(--main-font-color);
   user-select: none;
   background-color: var(--main-background-color);
