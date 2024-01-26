@@ -1,6 +1,5 @@
 const whichOS = () => {
   const UserAgent = navigator.userAgent.toLowerCase();
-  console.log(UserAgent);
   return {
     isIpad: /ipad/.test(UserAgent),
     isIphone: /iphone os/.test(UserAgent),

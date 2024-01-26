@@ -93,6 +93,7 @@
   flex-direction: row;
   width: 100%;
   height: 40px;
+  user-select: none;
   border-bottom: solid 1px var(--active-background-color);
 }
 
@@ -135,6 +136,7 @@
   justify-content: center;
   width: 60px;
   height: 100%;
+  cursor: pointer;
 }
 
 .discover-top-bar-search-icon {
@@ -156,19 +158,6 @@
   width: 50px;
   height: 100%;
   background: linear-gradient(to left, var(--mask-start-color), var(--mask-end-color));
-}
-
-.discover-search-page-containre {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100dvw;
-  height: 100dvh;
-  background-color: #ff2442;
-  border: solid 10px rgb(139 213 201);
-  opacity: 0;
-  transition: opacity 0.17s ease-in-out;
 }
 
 @media screen and (width < 900px) {

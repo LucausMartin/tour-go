@@ -1,0 +1,79 @@
+.discover-search-page-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  width: 100dvw;
+  height: 100dvh;
+  padding: 0 8px 8px;
+  background-color: var(--main-background-color);
+  opacity: 0;
+  transition: opacity 0.17s ease-in-out;
+}
+
+.discover-search-page-top-bar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-top: 8px;
+}
+
+.discover-search-page-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 34px;
+}
+
+.discover-search-page-input {
+  position: relative;
+  left: -14px;
+  width: calc(100% - 22px);
+  height: 100%;
+  padding-left: 30px;
+  font-size: 14px;
+  line-height: 120%;
+  caret-color: #ff2442;
+  background-color: var(--active-background-color);
+  border: none;
+  border-radius: 9999px;
+  outline: none;
+}
+
+.discover-search-page-search {
+  position: relative;
+  left: 12px;
+  font-size: 22px ;
+}
+
+.discover-search-page-font {
+  color: var(--main-font-color);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.discover-search-page-icon {
+  color: var(--main-icon-color);
+}
+
+.discover-search-page-back {
+  font-size: 20px;
+}
+
+.discover-search-page-content-container {
+  flex: 1;
+  padding-top: 5px;
+  overflow-y: scroll;
+  background-color: var(--main-background-color);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+}
+
+.discover-search-page-content-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}

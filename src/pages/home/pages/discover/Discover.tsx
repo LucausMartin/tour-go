@@ -8,7 +8,7 @@ import { ReactSetState } from '@myTypes/type.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
-import { daley } from '@myCommon/daley.ts';
+import { SearchPage } from './pages/SearchPage.tsx';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
@@ -158,36 +158,6 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
       <div className="discover-top-bar-search" onClick={() => setSearchPageShow(true)}>
         <MdOutlineSearch className="discover-top-bar-search-icon" />
       </div>
-    </div>
-  );
-};
-
-const SearchPage: FC<{ searchPageShow: boolean; setSearchPageShow: ReactSetState<boolean> }> = ({
-  searchPageShow,
-  setSearchPageShow
-}) => {
-  const [daleyAnimation, setdaleyAnimation] = useState(false);
-
-  useEffect(() => {
-    if (!searchPageShow) {
-      daley(180).then(() => {
-        setdaleyAnimation(false);
-      });
-    } else {
-      setdaleyAnimation(true);
-    }
-  }, [searchPageShow]);
-
-  return (
-    <div
-      style={{
-        opacity: searchPageShow ? '1' : '0',
-        zIndex: daleyAnimation ? '1' : '-1'
-      }}
-      className="discover-search-page-containre"
-    >
-      search
-      <button onClick={() => setSearchPageShow(false)}>close</button>
     </div>
   );
 };

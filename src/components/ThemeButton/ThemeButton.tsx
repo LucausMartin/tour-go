@@ -4,7 +4,6 @@ import { useTheme } from '@myHooks/useTheme.ts';
 
 const ThemeButton: FC<{ display: boolean }> = ({ display }) => {
   const theme = useTheme();
-  console.log(theme);
   const [buttonClassName, setButtonClassName] = useState('button');
 
   useEffect(() => {
