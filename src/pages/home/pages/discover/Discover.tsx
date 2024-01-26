@@ -110,7 +110,7 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
     } else {
       setStartState(false);
     }
-    if (scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth >= scrollWidth) {
+    if (scrollLeft && clientWidth && scrollWidth && scrollLeft + clientWidth >= scrollWidth - 5) {
       setEndState(true);
     } else {
       setEndState(false);
