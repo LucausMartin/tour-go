@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router-dom';
 
-type LocationKind = 'navigate' | 'articleKind';
+type LocationKind = 'navigate' | 'articleKind' | 'meArticleKind';
 
 const useMatchLocation = (locationKind: LocationKind) => {
-  if (locationKind !== 'navigate' && locationKind !== 'articleKind') {
+  if (locationKind !== 'navigate' && locationKind !== 'articleKind' && locationKind !== 'meArticleKind') {
     throw new Error('locationKind must be "navigate" or "articleKind"');
   }
 
@@ -23,6 +23,12 @@ const useMatchLocation = (locationKind: LocationKind) => {
   if (locationKind === 'articleKind') {
     // 取出 discover/ 这个字符串之后的内容
     const match = location.pathname.match(/discover\/(.*)/);
+    return match ? match[1] : '';
+  }
+
+  if (locationKind === 'meArticleKind') {
+    // 取出 me/ 这个字符串之后的内容
+    const match = location.pathname.match(/me\/(.*)/);
     return match ? match[1] : '';
   }
 
