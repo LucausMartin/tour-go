@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useRef } from 'react';
-import { ReactSetState } from '@myTypes/type.ts';
+import { ReactSetState } from '@myTypes/types.ts';
 import { daley } from '@myCommon/daley.ts';
 import { MdArrowBackIos, MdOutlineSearch } from 'react-icons/md';
 import './searchPage.css';
