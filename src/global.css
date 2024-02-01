@@ -17,6 +17,9 @@ ul, li, ol {
 }
 
 :root {
+  --main-theme-color: rgb(179 69 113);
+  --main-theme-hover-outlined-color: rgb(179 69 113 / 25.3%);
+  --main-theme-hover-contained-color:rgb(146 25 73);
   --main-background-color: #fff;
   --active-background-color: rgb(0 0 0 / 6%);
   --main-font-color: #0a0a0a;
