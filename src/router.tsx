@@ -3,18 +3,18 @@ import App from './App.tsx';
 import { Home } from './pages/home/Home.tsx';
 import { Error } from './pages/error/Error.tsx';
 import { Discover, DiscoverContent } from './pages/home/pages/discover/Discover.tsx';
-import { KindList } from './pages/home/pages/discover/type.ts';
+import { MeContent } from './pages/home/pages/me/Me.tsx';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />} errorElement={<Error />}>
       <Route caseSensitive path="home" element={<Home />}>
         <Route caseSensitive path="discover" element={<Discover />}>
-          {KindList.map(item => (
-            <Route key={item.key} caseSensitive path=":kind" element={<DiscoverContent />}></Route>
-          ))}
+          <Route caseSensitive path=":kind" element={<DiscoverContent />} />
         </Route>
-        <Route caseSensitive path="me" lazy={() => import('./pages/home/pages/me/Me.tsx')} />
+        <Route caseSensitive path="me" lazy={() => import('./pages/home/pages/me/Me.tsx')}>
+          <Route caseSensitive path=":kind" element={<MeContent />} />
+        </Route>
         <Route caseSensitive path="publish" lazy={() => import('./pages/home/pages/publish/Publish.tsx')} />
         <Route caseSensitive path="message" lazy={() => import('./pages/home/pages/message/Message.tsx')} />
       </Route>
