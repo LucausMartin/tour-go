@@ -15,7 +15,7 @@ interface KindItem {
   key: KindKeys;
 }
 
-export const KindList: KindItem[] = [
+export const discoverKindList: KindItem[] = [
   {
     title: '推荐',
     key: 'recommand'
