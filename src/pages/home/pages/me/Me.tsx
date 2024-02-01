@@ -5,6 +5,7 @@ import { Edit, ExitToApp } from '@mui/icons-material';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { meKindList, KindKey } from './types.ts';
 import { useNavigate, useParams } from 'react-router-dom';
+import avatar from '../../../../assets/avatar.jpg';
 
 export function Component() {
   return <Me></Me>;
@@ -31,7 +32,7 @@ const MeInformation = () => {
               width: windowSize.width && windowSize.width >= 900 ? 180 : 100,
               height: windowSize.width && windowSize.width >= 900 ? 180 : 100
             }}
-            src="/src/assets/avatar.jpg"
+            src={avatar}
             alt="avatar"
           ></Avatar>
         </div>
