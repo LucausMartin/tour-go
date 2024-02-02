@@ -170,7 +170,7 @@ const MeContent = () => {
             }}
             key={item.key}
           >
-            {item.title} {item.key === 'visitHistory' ? '' : ' '}
+            {item.title} {item.key === 'visitHistory' ? '' : <>&nbsp;</>}
             <span style={{ fontWeight: 'normal' }}>{ob[item.key]}</span>
           </div>
         ))}
