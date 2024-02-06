@@ -1,12 +1,16 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './navigate.css';
-// 导航烂可点的选项
 import { NavList, NavListKeys } from './types.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
+import { FavoriteBorderOutlined, GradeOutlined, MarkChatUnreadOutlined } from '@mui/icons-material';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectLogin, loginAction } from '@myStore/slices/loginSlice.ts';
 
 export const NavigateBar: FC = () => {
+  const loginState = useSelector(selectLogin);
+  const dispatch = useDispatch();
   const location = useMatchLocation('navigate');
 
   const windowSize = useWindowSize();
@@ -42,6 +46,66 @@ export const NavigateBar: FC = () => {
               <span>{item.title}</span>
             </div>
           </div>
+        ) : item.key === 'me' ? (
+          loginState ? (
+            <div
+              key={item.key}
+              className="nav-list"
+              onClick={navToPage(item.key)}
+              style={{
+                backgroundColor:
+                  windowSize.width && windowSize.width >= 900 && location === item.key
+                    ? 'var(--active-background-color)'
+                    : '',
+                color:
+                  windowSize.width && windowSize.width < 900 && location === item.key ? 'var(--active-font-color)' : ''
+              }}
+            >
+              <div className="nav-list-content">
+                <item.icon
+                  className="nav-icon"
+                  style={{
+                    color:
+                      windowSize.width && windowSize.width < 900 && location === item.key
+                        ? 'var(--active-font-color)'
+                        : ''
+                  }}
+                />
+                <span>{item.title}</span>
+              </div>
+            </div>
+          ) : windowSize.width && windowSize.width < 900 ? (
+            <div
+              key={item.key}
+              className="nav-list"
+              onClick={navToPage(item.key)}
+              style={{
+                backgroundColor:
+                  windowSize.width && windowSize.width >= 900 && location === item.key
+                    ? 'var(--active-background-color)'
+                    : '',
+                color:
+                  windowSize.width && windowSize.width < 900 && location === item.key ? 'var(--active-font-color)' : ''
+              }}
+            >
+              <div className="nav-list-content">
+                <item.icon
+                  className="nav-icon"
+                  style={{
+                    color:
+                      windowSize.width && windowSize.width < 900 && location === item.key
+                        ? 'var(--active-font-color)'
+                        : ''
+                  }}
+                />
+                <span>{item.title}</span>
+              </div>
+            </div>
+          ) : (
+            <div key={item.key} className="nav-list nav-login" onClick={() => dispatch(loginAction())}>
+              登录
+            </div>
+          )
         ) : (
           <div
             key={item.key}
@@ -71,6 +135,23 @@ export const NavigateBar: FC = () => {
           </div>
         )
       )}
+      <div className="nav-recommand-login">
+        <div style={{ color: 'var(--main-font-color)', fontSize: '15px' }}>登录即得</div>
+        <div>
+          <FavoriteBorderOutlined style={{ fontSize: '14px', marginRight: '3px', position: 'relative', top: '1px' }} />
+          更懂你的优质内容
+        </div>
+        <div>
+          <GradeOutlined
+            style={{ fontSize: '17px', marginRight: '0px', position: 'relative', top: '2.5px', left: '-1.7px' }}
+          />
+          点赞收藏不会迷路
+        </div>
+        <div>
+          <MarkChatUnreadOutlined style={{ fontSize: '14px', marginRight: '3px', position: 'relative', top: '3px' }} />
+          与他人更高效互动
+        </div>
+      </div>
     </nav>
   );
 };

@@ -43,6 +43,18 @@
   margin-left: 10px
 }
 
+.nav-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--main-background-color);
+  background-color: var(--main-theme-color);
+}
+
+.nav-login:hover {
+  background-color: var(--main-theme-hover-contained-color);
+}
+
 @media screen and (width < 900px) {
   .nav-icon {
     width: 20px;
@@ -60,13 +72,7 @@
   }
 
   .nav-list:hover {
-    font-weight: 600;
-    color: var(--active-font-color);
     background-color: var(--main-background-color);
-  }
-  
-  .nav-list:hover .nav-icon {
-    color: var(--active-font-color);
   }
 
   .nav-logo {
