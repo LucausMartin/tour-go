@@ -1,0 +1,9 @@
+.pop-ups-container {
+  position: absolute;
+  inset: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--mask-backdrop);
+}
