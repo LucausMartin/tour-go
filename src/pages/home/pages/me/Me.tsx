@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import './me.css';
 import { Button, Avatar } from '@mui/material';
-import { Edit, ExitToApp } from '@mui/icons-material';
+import { Edit, Logout } from '@mui/icons-material';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { meKindList, KindKey } from './types.ts';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -71,7 +71,7 @@ const MeInformation = () => {
                   className="me-info-data-action-log-out"
                   variant="contained"
                   disableElevation
-                  startIcon={<ExitToApp></ExitToApp>}
+                  startIcon={<Logout></Logout>}
                 >
                   注销
                 </Button>
@@ -100,7 +100,7 @@ const MeInformation = () => {
               className="me-info-data-action-log-out"
               variant="contained"
               disableElevation
-              startIcon={<ExitToApp></ExitToApp>}
+              startIcon={<Logout></Logout>}
             >
               注销
             </Button>
@@ -140,9 +140,6 @@ const MeContent = () => {
     const scrollLeft = rootRef.current?.scrollLeft;
     const scrollWidth = rootRef.current?.scrollWidth;
     const clientWidth = rootRef.current?.clientWidth;
-    console.log(scrollLeft);
-    console.log(scrollWidth);
-    console.log(clientWidth);
     if (scrollLeft === 0) {
       setStartState(false);
     } else {
