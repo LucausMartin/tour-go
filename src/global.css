@@ -16,6 +16,7 @@ ul, li, ol {
   list-style-type: none;
 }
 
+
 :root {
   --main-theme-color: rgb(179 69 113);
   --main-theme-hover-outlined-color: rgb(179 69 113 / 25.3%);
@@ -28,6 +29,7 @@ ul, li, ol {
   --active-font-color: #ff2442;
   --mask-start-color: rgb(255 255 255 / 100%);
   --mask-end-color: rgb(255 255 255 / 0%);
+  --mask-backdrop: rgb(0 0 0 / 25%);
 
   overflow: hidden;
   color: var(--main-font-color);
