@@ -26,7 +26,7 @@
   padding: 0 50px 0 20px;
   font-size: 16px;
   line-height: 120%;
-  caret-color: #ff2442;
+  caret-color: var(--active-font-color);
   background-color: var(--active-background-color);
   border: none;
   border-radius: 20px;
@@ -121,13 +121,11 @@
   height: 100%;
   color: var(--inactive-font-color);
   white-space: nowrap;
+  user-select: none;
 }
 
 .discover-top-bar-list-item:hover {
-  font-weight: 600;
-  color: var(--active-font-color);
   cursor: pointer;
-  user-select: none;
 }
 
 .discover-top-bar-search {
@@ -160,6 +158,18 @@
   background: linear-gradient(to left, var(--mask-start-color), var(--mask-end-color));
 }
 
+.nav-recommand-login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  color: var(--inactive-font-color);
+  border: 2px solid var(--active-background-color);
+  border-radius: 10%;
+}
+
 @media screen and (width < 900px) {
   .discover-container {
     padding: 8px 8px 0;
@@ -170,6 +180,10 @@
     top: 48px;
     flex: none;
     height: calc(100% - 48px)
+  }
+
+  .nav-recommand-login {
+    display: none;
   }
 }
 

@@ -5,7 +5,7 @@ import { Space } from '@myComponents/Space/Space.tsx';
 import { discoverKindList, KindKeys } from './types.ts';
 import { ReactSetState } from '@myTypes/types.ts';
 import { useWindowSize } from '@uidotdev/usehooks';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
 import { MaskDialog } from '@myComponents/MaskDialog/MaskDialog.tsx';
 
@@ -29,7 +29,7 @@ const Discover: FC = () => {
           <SearchPage searchPageShow={searchPageShow} setSearchPageShow={setSearchPageShow} />
         </>
       )}
-      <DiscoverContent />
+      <Outlet />
     </div>
   );
 };
@@ -163,7 +163,11 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
 
 const DiscoverContent: FC = () => {
   const param = useParams();
-  return <div className="discover-content">{param.kind}</div>;
+  return (
+    <>
+      <div className="discover-content">{param.kind}</div>
+    </>
+  );
 };
 
 const SearchPage: FC<{ searchPageShow: boolean; setSearchPageShow: ReactSetState<boolean> }> = ({
