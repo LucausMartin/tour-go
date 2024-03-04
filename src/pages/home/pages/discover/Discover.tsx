@@ -12,6 +12,8 @@ import { LoginPopUps } from '../../../login/Login.tsx';
 import { useSelector } from 'react-redux';
 import { selectLogin } from '@myStore/slices/loginSlice.ts';
 import { FavoriteBorder } from '@mui/icons-material';
+import image1 from '../../../../assets/img/1.webp';
+import avatar from '../../../../assets/avatar.jpg';
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
 
@@ -445,8 +447,8 @@ const DiscoverContentItem: FC<{ articleID: string; userName: string }> = ({ arti
 
   useEffect(() => {
     // fetch data
-    setImgSrc(`/src/assets/img/${articleID}.webp`);
-    setAvatarSrc(`/src/assets/avatar.jpg`);
+    setImgSrc(image1);
+    setAvatarSrc(avatar);
     setDescription('descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription');
     setName('其实就是一个用户名，but长一点');
     setLikeNumber('10');
