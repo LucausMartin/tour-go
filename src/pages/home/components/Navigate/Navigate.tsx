@@ -6,7 +6,7 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
 import { FavoriteBorderOutlined, GradeOutlined, MarkChatUnreadOutlined } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectLogin, loginAction } from '@myStore/slices/loginSlice.ts';
+import { selectLogin, readyLoginAction } from '@myStore/slices/loginSlice.ts';
 
 export const NavigateBar: FC = () => {
   const loginState = useSelector(selectLogin);
@@ -18,6 +18,14 @@ export const NavigateBar: FC = () => {
 
   const navToPage = (pageRoute: NavListKeys) => {
     return () => {
+      if (loginState === 'logout' && pageRoute === 'me') {
+        dispatch(readyLoginAction());
+        return;
+      }
+      if (pageRoute !== 'discover' && loginState === 'logout') {
+        dispatch(readyLoginAction());
+        return;
+      }
       navigate(`/home/${pageRoute}`);
       if (pageRoute === 'discover') {
         navigate(`/home/${pageRoute}/recommand`);
@@ -47,7 +55,7 @@ export const NavigateBar: FC = () => {
             </div>
           </div>
         ) : item.key === 'me' ? (
-          loginState ? (
+          loginState === 'login' ? (
             <div
               key={item.key}
               className="nav-list"
@@ -102,7 +110,7 @@ export const NavigateBar: FC = () => {
               </div>
             </div>
           ) : (
-            <div key={item.key} className="nav-list nav-login" onClick={() => dispatch(loginAction())}>
+            <div key={item.key} className="nav-list nav-login" onClick={() => dispatch(readyLoginAction())}>
               登录
             </div>
           )
