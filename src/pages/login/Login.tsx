@@ -9,7 +9,20 @@ import { fetchData } from '@myCommon/fetchData.ts';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginAction, logoutAction } from '@myStore/slices/loginSlice.ts';
+
+import JSEncrypt from 'jsencrypt';
+import localforage from 'localforage';
+
 import './login.css';
+
+const test = async () => {
+  const res = await fetchData<{ users: string[] }>('GET', {
+    url: '/api/users/list'
+  });
+  console.log(res);
+};
+
+const encryptor = new JSEncrypt();
 
 const LoginPopUps: FC = () => {
   const dispatch = useDispatch();
@@ -25,6 +38,104 @@ const LoginPopUps: FC = () => {
   const [certifyCharacters, setCertifyCharacters] = useState<string>('');
   const [name, setName] = useState<string>('');
 
+  const getEncryptedPassword = async (password: string) => {
+    // 获取公钥
+    const publicKey = await fetchData<{ publicKey: string }>('GET', { url: '/api/users/get-publick-key' });
+    if (publicKey.code !== 200) {
+      throw new Error('server error');
+    }
+    encryptor.setPublicKey(publicKey.data.publicKey);
+    if (typeof encryptor.getPublicKey() === 'boolean') {
+      throw new Error('encryptor error');
+    }
+    if (typeof encryptor.encrypt(password) === 'string') {
+      return encryptor.encrypt(password) as string;
+    } else {
+      throw new Error('encryptor error');
+    }
+  };
+
+  const loginFetch = async () => {
+    // 验证密码是否正确
+    // 获得密文密码
+    const encryptedPassword = await getEncryptedPassword(password);
+    const res = await fetchData<{ token: string; time: number }, { username: string; password: string }>(
+      'POST',
+      { url: '/api/users/login' },
+      { username: '@' + username, password: encryptedPassword }
+    );
+    // 密码正确
+    if (res.code === 200) {
+      await localforage.setItem('token', res.data.token);
+      await localforage.setItem('time', res.data.time);
+      dispatch(loginAction());
+      setLoading(false);
+      navigate('/');
+      return true;
+      // 密码错误
+    } else if (res.code === 503) {
+      setErrorType('password');
+      setLoading(false);
+      return false;
+    } else {
+      throw new Error('server error');
+    }
+  };
+
+  const registerFetch = async () => {
+    // 获得密文密码
+    const encryptedPassword = await getEncryptedPassword(password);
+    const res = await fetchData<never, { username: string; password: string; name: string; certifyCharacters: string }>(
+      'POST',
+      { url: '/api/users/register' },
+      {
+        username: '@' + username,
+        password: encryptedPassword,
+        name: name,
+        certifyCharacters: certifyCharacters
+      }
+    );
+    if (res.code === 200) {
+      setErrorType('default');
+      setLoadingButtonState('login');
+      setLoading(false);
+      const loginSuccessState = await loginFetch();
+      if (loginSuccessState) {
+        dispatch(loginAction());
+      } else {
+        throw new Error('server error');
+      }
+    } else {
+      throw new Error('server error');
+    }
+  };
+
+  const hasUserFetch = async () => {
+    // 验证是否存在用户
+    const res = await fetchData<{ hasUser: boolean }, { username: string }>(
+      'POST',
+      { url: '/api/users/has' },
+      { username: '@' + username }
+    );
+    // 不存在用户
+    if (res.code === 200 && res.data.hasUser === false) {
+      setErrorType('register');
+      setLoadingButtonState('register');
+      setLoading(false);
+      //存在用户
+    } else if (res.code === 200 && res.data.hasUser === true) {
+      if (password === '') {
+        setErrorType('passwordEmpty');
+        setLoading(false);
+        return;
+      }
+      // 登录
+      loginFetch();
+    } else {
+      throw new Error('server error');
+    }
+  };
+
   const loginMethod = (type: string) => {
     return async () => {
       if (type === 'login') {
@@ -35,40 +146,7 @@ const LoginPopUps: FC = () => {
         setLoading(true);
         try {
           // 验证是否存在用户
-          const res = await fetchData<{ hasUser: boolean }, { username: string }>(
-            'POST',
-            { url: '/api/users/has' },
-            { username: '@' + username }
-          );
-          // 不存在用户
-          if (res.code === 200 && res.data.hasUser === false) {
-            setErrorType('register');
-            setLoadingButtonState('register');
-            setLoading(false);
-            //存在用户
-          } else if (res.code === 200 && res.data.hasUser === true) {
-            if (password === '') {
-              setErrorType('passwordEmpty');
-              setLoading(false);
-              return;
-            }
-            // 验证密码是否正确
-            const res = await fetchData<never, { username: string; password: string }>(
-              'POST',
-              { url: '/api/users/login' },
-              { username: '@' + username, password: password }
-            );
-            // 密码正确
-            if (res.code === 200) {
-              dispatch(loginAction());
-              setLoading(false);
-              navigate('/');
-              // 密码错误
-            } else {
-              setErrorType('password');
-              setLoading(false);
-            }
-          }
+          hasUserFetch();
         } catch (err) {
           setTimeout(() => {
             setLoading(false);
@@ -98,22 +176,8 @@ const LoginPopUps: FC = () => {
         }
         setLoading(true);
         try {
-          const res = await fetchData<
-            never,
-            { username: string; password: string; name: string; certifyCharacters: string }
-          >(
-            'POST',
-            { url: '/api/users/register' },
-            { username: '@' + username, password: password, name: name, certifyCharacters: certifyCharacters }
-          );
-          if (res.code === 200) {
-            setErrorType('default');
-            setLoadingButtonState('login');
-            setLoading(false);
-            dispatch(loginAction());
-          } else {
-            throw new Error('server error');
-          }
+          // 注册
+          registerFetch();
         } catch (err) {
           setTimeout(() => {
             setLoading(false);
@@ -152,8 +216,9 @@ const LoginPopUps: FC = () => {
           </div>
         )}
         <div
-          onClick={() => {
+          onClick={async () => {
             dispatch(logoutAction());
+            localforage.removeItem('loginTodo');
           }}
           style={{ position: 'absolute', top: '4.9px', right: '4px' }}
         >
@@ -256,6 +321,7 @@ const LoginPopUps: FC = () => {
           >
             {loadingButtonState}
           </LoadingButton>
+          <button onClick={test}>123</button>
         </CardContent>
       </Card>
     </PopUps>

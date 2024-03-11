@@ -1,9 +1,11 @@
+import localforage from 'localforage';
+
 // 网络请求封装，第一个范型是返回的数据类型，第二个范型是请求参数的类型
 type Options = {
   url: string;
 };
 type successNumber = 200 | 201;
-type failNumber = 500 | 404 | 401;
+type failNumber = 500 | 401 | 503;
 
 // 函数重载
 async function fetchData<Data>(
@@ -31,7 +33,14 @@ async function fetchData<Data, Params>(
   const { url } = options;
   if (method === 'GET') {
     try {
-      const response = await fetch(url);
+      const tokenValue = await localforage.getItem<string>('token');
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: tokenValue ? `Bearer ${tokenValue}` : ''
+        }
+      });
       if (response.status === 404) {
         throw new Error('404');
       }
@@ -39,16 +48,18 @@ async function fetchData<Data, Params>(
       return responseJson;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err);
+        throw new Error(err.message);
       }
     }
   }
   if (method === 'POST') {
     try {
+      const tokenValue = await localforage.getItem<string>('token');
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: tokenValue ? `Bearer ${tokenValue}` : ''
         },
         body: JSON.stringify(params)
       });
@@ -59,7 +70,7 @@ async function fetchData<Data, Params>(
       return responseJson;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err);
+        throw new Error(err.message);
       }
     }
   }

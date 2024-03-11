@@ -6,12 +6,14 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { meKindList, KindKey } from './types.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import avatar from '../../../../assets/avatar.jpg';
+import { useLoginForbidden } from '@myHooks/useLoginForbidden.ts';
 
 export function Component() {
   return <Me></Me>;
 }
 
 const Me: FC = () => {
+  useLoginForbidden();
   return (
     <div className="me-container">
       <MeInformation />

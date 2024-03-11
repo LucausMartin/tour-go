@@ -438,7 +438,7 @@ const SearchPage: FC<{ searchPageShow: boolean; setSearchPageShow: ReactSetState
 };
 
 const DiscoverContentItem: FC<{ articleID: string; userName: string }> = ({ articleID, userName }) => {
-  console.log('name', userName);
+  console.debug('userName', userName);
   const [imgSrc, setImgSrc] = useState<string>('');
   const [avatarSrc, setAvatarSrc] = useState<string>('');
   const [description, setDescription] = useState<string>('');

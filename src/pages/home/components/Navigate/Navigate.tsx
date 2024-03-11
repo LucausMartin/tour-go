@@ -26,10 +26,11 @@ export const NavigateBar: FC = () => {
         dispatch(readyLoginAction());
         return;
       }
-      navigate(`/home/${pageRoute}`);
       if (pageRoute === 'discover') {
         navigate(`/home/${pageRoute}/recommand`);
+        return;
       }
+      navigate(`/home/${pageRoute}`);
     };
   };
 
