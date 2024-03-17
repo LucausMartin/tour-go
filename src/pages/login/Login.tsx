@@ -9,15 +9,13 @@ import { fetchData } from '@myCommon/fetchData.ts';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginAction, logoutAction } from '@myStore/slices/loginSlice.ts';
-
 import JSEncrypt from 'jsencrypt';
 import localforage from 'localforage';
-
 import './login.css';
 
 const test = async () => {
   const res = await fetchData<{ users: string[] }>('GET', {
-    url: '/api/users/list'
+    url: '/api/users/self-info'
   });
   console.log(res);
 };
@@ -70,7 +68,7 @@ const LoginPopUps: FC = () => {
       await localforage.setItem('time', res.data.time);
       dispatch(loginAction());
       setLoading(false);
-      navigate('/');
+      navigate('/home/discover/recommand');
       return true;
       // 密码错误
     } else if (res.code === 503) {
@@ -202,7 +200,7 @@ const LoginPopUps: FC = () => {
 
   return (
     <PopUps>
-      <Card style={{ position: 'relative' }} className="login-desktop-container">
+      <Card className="login-desktop-container">
         {loadingButtonState === 'register' && (
           <div
             onClick={() => {
@@ -218,11 +216,10 @@ const LoginPopUps: FC = () => {
         <div
           onClick={async () => {
             dispatch(logoutAction());
-            localforage.removeItem('loginTodo');
           }}
           style={{ position: 'absolute', top: '4.9px', right: '4px' }}
         >
-          <Close style={{ fontSize: '23px', opacity: '0.89' }} />
+          <Close style={{ fontSize: '23px', opacity: '0.89', color: '#0a0a0a', cursor: 'pointer' }} />
         </div>
         <CardContent className="login-desktop-content">
           <div className="login-desktop-tip">
