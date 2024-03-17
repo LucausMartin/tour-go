@@ -53,11 +53,12 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [{
           handler: 'NetworkFirst',
-          urlPattern: /^httpss?.*/,
+          //http://localhost:5173/api/users/self-info
+          urlPattern: /\/api\/users\/self-info/,
           method: 'GET',
           options: {
             backgroundSync: {
-              name: 'myQueueName',
+              name: 'user-info',
               options: {
                 maxRetentionTime: 24 * 60
               }
