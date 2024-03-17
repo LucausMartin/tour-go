@@ -6,14 +6,15 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { meKindList, KindKey } from './types.ts';
 import { useNavigate, useParams } from 'react-router-dom';
 import avatar from '../../../../assets/avatar.jpg';
-import { useLoginForbidden } from '@myHooks/useLoginForbidden.ts';
+import { fetchData } from '@myCommon/fetchData.ts';
+import { useLoginState } from '@myHooks/useLoginState.ts';
 
 export function Component() {
   return <Me></Me>;
 }
 
 const Me: FC = () => {
-  useLoginForbidden();
+  useLoginState();
   return (
     <div className="me-container">
       <MeInformation />
@@ -24,6 +25,16 @@ const Me: FC = () => {
 
 const MeInformation = () => {
   const windowSize = useWindowSize();
+  const getUserInfo = async () => {
+    const res = await fetchData<{ users: string[] }>('GET', {
+      url: '/api/users/self-info'
+    });
+    console.log(res);
+  };
+
+  // useEffect(() => {
+  //   getUserInfo();
+  // });
 
   return (
     <>
@@ -73,6 +84,9 @@ const MeInformation = () => {
                   className="me-info-data-action-log-out"
                   variant="contained"
                   disableElevation
+                  onClick={() => {
+                    getUserInfo();
+                  }}
                   startIcon={<Logout></Logout>}
                 >
                   注销

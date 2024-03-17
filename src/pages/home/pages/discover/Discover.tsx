@@ -14,6 +14,8 @@ import { selectLogin } from '@myStore/slices/loginSlice.ts';
 import { FavoriteBorder } from '@mui/icons-material';
 import image1 from '../../../../assets/img/1.webp';
 import avatar from '../../../../assets/avatar.jpg';
+import { useLoginState } from '@myHooks/useLoginState.ts';
+
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
 
@@ -204,6 +206,7 @@ import avatar from '../../../../assets/avatar.jpg';
 // ];
 
 const Discover: FC = () => {
+  useLoginState();
   const loginState = useSelector(selectLogin);
   const windowSize = useWindowSize();
   const [searchPageShow, setSearchPageShow] = useState(false);
@@ -438,11 +441,10 @@ const SearchPage: FC<{ searchPageShow: boolean; setSearchPageShow: ReactSetState
 };
 
 const DiscoverContentItem: FC<{ articleID: string; userName: string }> = ({ articleID, userName }) => {
-  console.debug('userName', userName);
   const [imgSrc, setImgSrc] = useState<string>('');
   const [avatarSrc, setAvatarSrc] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>(userName);
   const [likeNumber, setLikeNumber] = useState<string>('');
 
   useEffect(() => {
