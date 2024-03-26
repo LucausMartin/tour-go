@@ -3,22 +3,16 @@ import { Card, TextField, CardContent, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { PopUps } from '@myComponents/PopUps/PopUps.tsx';
 import { Typewriter } from '@myComponents/TypeWriter/TypeWriter.tsx';
-import { ErrorMessageType, ErrorMessage } from './types.ts';
-import { Login, VisibilityOff, Visibility, ArrowBackIosNew, Close } from '@mui/icons-material';
+import { ErrorMessageType, ErrorMessage, ForgetPasswordErrorMessage, ForgetPasswordErrorMessageType } from './types.ts';
+import { Login, VisibilityOff, Visibility, ArrowBackIosNew, Close, Check } from '@mui/icons-material';
 import { fetchData } from '@myCommon/fetchData.ts';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginAction, logoutAction } from '@myStore/slices/loginSlice.ts';
 import JSEncrypt from 'jsencrypt';
 import localforage from 'localforage';
+import { Space } from '@myComponents/Space/Space.tsx';
 import './login.css';
-
-const test = async () => {
-  const res = await fetchData<{ users: string[] }>('GET', {
-    url: '/api/users/self-info'
-  });
-  console.log(res);
-};
 
 const encryptor = new JSEncrypt();
 
@@ -28,6 +22,7 @@ const LoginPopUps: FC = () => {
   const [loadingButtonState, setLoadingButtonState] = useState<'login' | 'register'>('login');
   const [loading, setLoading] = useState<boolean>(false);
   const [errorType, setErrorType] = useState<ErrorMessageType>('default');
+  const [forgetPasswordErrorType, setForgetPasswordErrorType] = useState<ForgetPasswordErrorMessageType>('default');
   const [focusUsername, setFocusUsername] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
@@ -35,8 +30,17 @@ const LoginPopUps: FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [certifyCharacters, setCertifyCharacters] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [forgetPasswordShow, setForgetPasswordShow] = useState<boolean>(false);
+  const [editPasswordShow, setEditPasswordShow] = useState<boolean>(false);
+  const [forgetUsername, setForgetUsername] = useState<string>('');
+  const [forgetCertifyCharacters, setForgetCertifyCharacters] = useState<string>('');
+  const [forgetLoading, setForgetLoading] = useState<boolean>(false);
+  const [forgetNewPassword, setForgetNewPassword] = useState<string>('');
+  const [forgetConfirmPassword, setForgetConfirmPassword] = useState<string>('');
+  const [forgetFocusUsernameState, setForgetFocusUsernameState] = useState<boolean>(false);
+  const [newPasswordShow, setNewPasswordShow] = useState<boolean>(false);
 
-  const getEncryptedPassword = async (password: string) => {
+  const getEncrypted = async (password: string) => {
     // 获取公钥
     const publicKey = await fetchData<{ publicKey: string }>('GET', { url: '/api/users/get-publick-key' });
     if (publicKey.code !== 200) {
@@ -56,7 +60,7 @@ const LoginPopUps: FC = () => {
   const loginFetch = async () => {
     // 验证密码是否正确
     // 获得密文密码
-    const encryptedPassword = await getEncryptedPassword(password);
+    const encryptedPassword = await getEncrypted(password);
     const res = await fetchData<{ token: string; time: number }, { username: string; password: string }>(
       'POST',
       { url: '/api/users/login' },
@@ -82,7 +86,8 @@ const LoginPopUps: FC = () => {
 
   const registerFetch = async () => {
     // 获得密文密码
-    const encryptedPassword = await getEncryptedPassword(password);
+    const encryptedPassword = await getEncrypted(password);
+    const encryptedCertifyCharacters = await getEncrypted(certifyCharacters);
     const res = await fetchData<never, { username: string; password: string; name: string; certifyCharacters: string }>(
       'POST',
       { url: '/api/users/register' },
@@ -90,7 +95,7 @@ const LoginPopUps: FC = () => {
         username: '@' + username,
         password: encryptedPassword,
         name: name,
-        certifyCharacters: certifyCharacters
+        certifyCharacters: encryptedCertifyCharacters
       }
     );
     if (res.code === 200) {
@@ -186,15 +191,142 @@ const LoginPopUps: FC = () => {
     };
   };
 
+  const certifyCharactersFetch = async () => {
+    try {
+      setForgetLoading(true);
+      // 验证字段
+      if (forgetUsername === '') {
+        setForgetPasswordErrorType('usernameEmpty');
+        setForgetLoading(false);
+        return;
+      }
+      if (forgetCertifyCharacters === '') {
+        setForgetPasswordErrorType('certifyCharactersEmpty');
+        setForgetLoading(false);
+        return;
+      }
+      // 验证是否存在用户
+      const hasUser = await fetchData<{ hasUser: boolean }, { username: string }>(
+        'POST',
+        { url: '/api/users/has' },
+        { username: '@' + forgetUsername }
+      );
+      // 不存在用户
+      if (hasUser.code === 200 && hasUser.data.hasUser === false) {
+        console.log('不存在用户');
+        setForgetPasswordErrorType('usernameError');
+        setForgetLoading(false);
+        //存在用户
+      } else if (hasUser.code === 200 && hasUser.data.hasUser === true) {
+        console.log('存在用户');
+        // 获得密文
+        const encryptedCertifyCharacters = await getEncrypted(forgetCertifyCharacters);
+        const res = await fetchData<never, { username: string; certifyCharacters: string }>(
+          'POST',
+          { url: '/api/users/forget-password' },
+          {
+            username: '@' + forgetUsername,
+            certifyCharacters: encryptedCertifyCharacters
+          }
+        );
+        if (res.code === 200) {
+          setForgetLoading(false);
+          setEditPasswordShow(true);
+          setForgetPasswordErrorType('newPasswordDefault');
+        } else if (res.code === 400) {
+          setForgetPasswordErrorType('certifyCharactersError');
+          setForgetLoading(false);
+        } else {
+          throw new Error('server error');
+        }
+      } else {
+        throw new Error('server error');
+      }
+    } catch (err) {
+      setForgetPasswordErrorType('network');
+      setForgetLoading(false);
+    }
+  };
+
+  const newPasswordFetch = async () => {
+    try {
+      setForgetLoading(true);
+      if (forgetNewPassword === '') {
+        setForgetPasswordErrorType('newPasswordEmpty');
+        setForgetLoading(false);
+        return;
+      }
+      if (forgetConfirmPassword === '') {
+        setForgetPasswordErrorType('newConfirmPasswordEmpty');
+        setForgetLoading(false);
+
+        return;
+      }
+      if (forgetNewPassword !== forgetConfirmPassword) {
+        setForgetPasswordErrorType('newConfirmPassword');
+        setForgetLoading(false);
+        return;
+      }
+
+      // 获得密文
+      const encryptedPassword = await getEncrypted(forgetNewPassword);
+      const res = await fetchData<never, { username: string; password: string }>(
+        'POST',
+        { url: '/api/users/change-password' },
+        {
+          username: '@' + forgetUsername,
+          password: encryptedPassword
+        }
+      );
+      if (res.code === 200) {
+        setForgetLoading(false);
+        setForgetPasswordShow(false);
+        setForgetNewPassword('');
+        setForgetConfirmPassword('');
+      } else {
+        setForgetPasswordErrorType('network');
+        setForgetLoading(false);
+      }
+    } catch (err) {
+      setForgetPasswordErrorType('network');
+      setForgetLoading(false);
+    }
+  };
+
+  const forgetPasswordFetch = async (type: 'certifyCharacters' | 'newPassword') => {
+    try {
+      if (type === 'certifyCharacters') {
+        certifyCharactersFetch();
+      } else {
+        newPasswordFetch();
+      }
+    } catch (err) {
+      setForgetPasswordErrorType('network');
+      setForgetLoading(false);
+    }
+  };
+
   const changeFocusUsernameState = (state: boolean) => {
     return () => {
       setFocusUsername(state);
     };
   };
 
+  const changeForgetFocusUsernameState = (state: boolean) => {
+    return () => {
+      setForgetFocusUsernameState(state);
+    };
+  };
+
   const changeShowPasswordState = (state: boolean) => {
     return () => {
       setShowPassword(state);
+    };
+  };
+
+  const changeShowNewPasswordState = (state: boolean) => {
+    return () => {
+      setNewPasswordShow(state);
     };
   };
 
@@ -232,6 +364,7 @@ const LoginPopUps: FC = () => {
           </div>
           <div className="login-desktop-input">
             <TextField
+              autoComplete="username"
               className="login-desktop-input-field"
               id="login-desktop-username"
               variant="standard"
@@ -247,6 +380,7 @@ const LoginPopUps: FC = () => {
               }}
             ></TextField>
             <TextField
+              autoComplete="current-password"
               className="login-desktop-input-field"
               id="login-desktop-password"
               variant="standard"
@@ -318,7 +452,132 @@ const LoginPopUps: FC = () => {
           >
             {loadingButtonState}
           </LoadingButton>
-          <button onClick={test}>123</button>
+          {loadingButtonState !== 'register' && (
+            <span className="login-forget-password" onClick={() => setForgetPasswordShow(true)}>
+              忘记密码?
+            </span>
+          )}
+          <Space width="100%" height="20px"></Space>
+          {forgetPasswordShow && (
+            <PopUps>
+              <Card className="login-desktop-container">
+                <div
+                  onClick={() => {
+                    setForgetPasswordShow(false);
+                    setForgetUsername('');
+                    setForgetCertifyCharacters('');
+                    setForgetNewPassword('');
+                    setForgetConfirmPassword('');
+                    setEditPasswordShow(false);
+                    changeShowNewPasswordState(false);
+                  }}
+                  style={{ position: 'absolute', top: '4.9px', right: '4px' }}
+                >
+                  <Close style={{ fontSize: '23px', opacity: '0.89', color: '#0a0a0a', cursor: 'pointer' }} />
+                </div>
+                <CardContent className="login-desktop-content">
+                  <div className="login-desktop-tip">
+                    <span className="login-desktop-tip-title">忘记密码</span>
+                    <Typewriter
+                      className={'login-desktop-tip-content'}
+                      text={ForgetPasswordErrorMessage[forgetPasswordErrorType]}
+                      typingSpeed={100}
+                    ></Typewriter>
+                  </div>
+                  <div className="login-desktop-input">
+                    {!editPasswordShow && (
+                      <>
+                        <TextField
+                          autoComplete="username"
+                          className="login-desktop-input-field"
+                          id="login-desktop-username"
+                          variant="standard"
+                          label="Username"
+                          onFocus={changeForgetFocusUsernameState(true)}
+                          onBlur={changeForgetFocusUsernameState(false)}
+                          InputProps={{
+                            startAdornment: forgetFocusUsernameState && (
+                              <InputAdornment position="start">@</InputAdornment>
+                            )
+                          }}
+                          value={forgetUsername}
+                          onChange={e => {
+                            setForgetUsername(e.target.value);
+                          }}
+                        ></TextField>
+                        <TextField
+                          className="login-desktop-input-field"
+                          id="register-desktop-certify-characters"
+                          variant="standard"
+                          label="CertifyCharacters"
+                          value={forgetCertifyCharacters}
+                          onChange={e => {
+                            setForgetCertifyCharacters(e.target.value);
+                          }}
+                        ></TextField>
+                      </>
+                    )}
+                    {editPasswordShow && (
+                      <>
+                        <TextField
+                          autoComplete="current-password"
+                          className="login-desktop-input-field"
+                          id="login-desktop-password"
+                          variant="standard"
+                          label="Password"
+                          type={newPasswordShow ? 'text' : 'password'}
+                          InputProps={{
+                            endAdornment: newPasswordShow ? (
+                              <div onClick={changeShowNewPasswordState(false)} style={{ cursor: 'pointer' }}>
+                                <Visibility />
+                              </div>
+                            ) : (
+                              <div onClick={changeShowNewPasswordState(true)} style={{ cursor: 'pointer' }}>
+                                <VisibilityOff />
+                              </div>
+                            )
+                          }}
+                          value={forgetNewPassword}
+                          onChange={e => {
+                            setForgetNewPassword(e.target.value);
+                          }}
+                        ></TextField>
+
+                        <TextField
+                          className="login-desktop-input-field"
+                          id="desktop-confirm-password"
+                          variant="standard"
+                          label="ConfirmPassword"
+                          type="password"
+                          value={forgetConfirmPassword}
+                          onChange={e => {
+                            setForgetConfirmPassword(e.target.value);
+                          }}
+                        ></TextField>
+                      </>
+                    )}
+                    <LoadingButton
+                      className="login-desktop-action-login"
+                      style={{
+                        color: loading ? 'rgba(255 255 255 / 74.3%)' : '',
+                        width: '120px',
+                        position: 'relative',
+                        left: 'calc(50% - 60px)'
+                      }}
+                      variant="contained"
+                      disableElevation
+                      startIcon={<Check></Check>}
+                      onClick={() => forgetPasswordFetch(editPasswordShow ? 'newPassword' : 'certifyCharacters')}
+                      loading={forgetLoading}
+                      loadingPosition="start"
+                    >
+                      confirm
+                    </LoadingButton>
+                  </div>
+                </CardContent>
+              </Card>
+            </PopUps>
+          )}
         </CardContent>
       </Card>
     </PopUps>
