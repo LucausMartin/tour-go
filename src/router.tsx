@@ -3,7 +3,6 @@ import App from './App.tsx';
 import { Home } from './pages/home/Home.tsx';
 import { Error } from './pages/error/Error.tsx';
 import { Discover, DiscoverContent } from './pages/home/pages/discover/Discover.tsx';
-import { MeContent } from './pages/home/pages/me/Me.tsx';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -13,10 +12,12 @@ export const router = createBrowserRouter(
           <Route caseSensitive path=":kind" element={<DiscoverContent />}></Route>
         </Route>
         <Route caseSensitive path="me" lazy={() => import('./pages/home/pages/me/Me.tsx')}>
-          <Route caseSensitive path=":kind" element={<MeContent />} />
+          <Route caseSensitive path=":kind" element={<></>} />
         </Route>
         <Route caseSensitive path="publish" lazy={() => import('./pages/home/pages/publish/Publish.tsx')} />
-        <Route caseSensitive path="message" lazy={() => import('./pages/home/pages/message/Message.tsx')} />
+        <Route caseSensitive path="message" lazy={() => import('./pages/home/pages/message/Message.tsx')}>
+          <Route caseSensitive path=":kind" element={<></>}></Route>
+        </Route>
       </Route>
     </Route>
   )

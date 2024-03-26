@@ -27,3 +27,23 @@ export const meKindList: Kinditem[] = [
     key: 'visitHistory'
   }
 ];
+
+export interface TypeNum {
+  production: number;
+  like: number;
+  collect: number;
+  draft: number;
+  visitHistory: string;
+}
+
+export interface UserInfo {
+  userName: string;
+  name: string;
+  bio: string;
+  follow: number;
+  follower: number;
+  plan: number;
+  like: number;
+  collect: number;
+  draft: number;
+}

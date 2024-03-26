@@ -76,6 +76,7 @@
 .me-info-data-follows-text {
   display: flex;
   gap: 5px;
+  cursor: pointer;
 }
 
 .me-info-data-follows-text-title {
@@ -164,6 +165,37 @@
   background-color: var(--active-background-color);
 }
 
+.me-article-content-null {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--main-font-color);
+}
+
+.me-article-content-null-text {
+  position: relative;
+  top: -60px;
+  left: -100px;
+  display: flex;
+  justify-content: center;
+  width: 300px;
+}
+
+.me-article-content-plan {
+  height: calc(100vh - 240px);
+  padding-top: 20px;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.me-article-content-plan::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+
 @media screen and (width < 900px) {
   .me-container {
     padding: 8px 8px 0;
@@ -197,6 +229,10 @@
 
   .me-article-title-item:hover {
     background-color: var(--main-background-color)
+  }
+
+  .me-article-content-null-text {
+    left: 0;
   }
 
 }
