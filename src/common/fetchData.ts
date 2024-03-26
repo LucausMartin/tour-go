@@ -4,8 +4,8 @@ import localforage from 'localforage';
 type Options = {
   url: string;
 };
-type successNumber = 200 | 201;
-type failNumber = 500 | 401 | 503;
+export type successNumber = 200 | 201;
+export type failNumber = 500 | 401 | 503 | 400;
 
 // 函数重载
 async function fetchData<Data>(
