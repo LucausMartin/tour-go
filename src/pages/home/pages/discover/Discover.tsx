@@ -11,10 +11,8 @@ import { MaskDialog } from '@myComponents/MaskDialog/MaskDialog.tsx';
 import { LoginPopUps } from '../../../login/Login.tsx';
 import { useSelector } from 'react-redux';
 import { selectLogin } from '@myStore/slices/loginSlice.ts';
-import { FavoriteBorder } from '@mui/icons-material';
-import image1 from '../../../../assets/img/1.webp';
-import avatar from '../../../../assets/avatar.jpg';
 import { useLoginState } from '@myHooks/useLoginState.ts';
+import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
@@ -360,66 +358,66 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
 const DiscoverContent: FC = () => {
   return (
     <div className="discover-content">
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
-      <DiscoverContentItem articleID="1" userName="1"></DiscoverContentItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
+      <PlanItem articleID="1" userName="1"></PlanItem>
     </div>
   );
 };
@@ -437,41 +435,6 @@ const SearchPage: FC<{ searchPageShow: boolean; setSearchPageShow: ReactSetState
     <MaskDialog maskShow={searchPageShow} setMaskShow={setSearchPageShow}>
       <Content />
     </MaskDialog>
-  );
-};
-
-const DiscoverContentItem: FC<{ articleID: string; userName: string }> = ({ articleID, userName }) => {
-  const [imgSrc, setImgSrc] = useState<string>('');
-  const [avatarSrc, setAvatarSrc] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [name, setName] = useState<string>(userName);
-  const [likeNumber, setLikeNumber] = useState<string>('');
-
-  useEffect(() => {
-    // fetch data
-    setImgSrc(image1);
-    setAvatarSrc(avatar);
-    setDescription('descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription');
-    setName('其实就是一个用户名，but长一点');
-    setLikeNumber('10');
-  }, [articleID]);
-  return (
-    <div className="discover-content-item">
-      <img src={imgSrc} className="discover-content-item-cover" alt="image" />
-      <div className="discover-content-item-info">
-        <div className="discover-content-item-description">{description}</div>
-        <div className="discover-content-item-article-info">
-          <div className="discover-content-item-article-author">
-            <img src={avatarSrc} className="discover-content-item-article-author-avatar" alt="avatar" />
-            <div className="discover-content-item-article-author-name">{name}</div>
-          </div>
-          <div className="discover-content-item-author-like">
-            <FavoriteBorder className="discover-content-item-author-like-icon" />
-            <div className="discover-content-item-author-like-number">{likeNumber}</div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 };
 
