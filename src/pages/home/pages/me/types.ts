@@ -46,4 +46,5 @@ export interface UserInfo {
   like: number;
   collect: number;
   draft: number;
+  avatar: string;
 }

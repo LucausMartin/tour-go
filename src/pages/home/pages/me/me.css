@@ -18,11 +18,23 @@
 }
 
 .me-info-avatar-container {
+  position: relative;
   width: 180px;
   height: 180px;
   overflow: hidden;
-  background-color: blue;
   border-radius: 9999px;
+}
+
+.me-info-avatar-edit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  color: var(--main-icon-color);
+  background-color: var(--mask-backdrop);
 }
 
 .me-info-avatar {
@@ -195,6 +207,74 @@
   width: 0;
 }
 
+.follow-container {
+  position: relative;
+  width: 60vh;
+  height: 90vh;
+  background-color: blue;
+}
+
+.follow-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: fit-content;
+  font-size: 24px;
+  color: white;
+}
+
+.me-edit-info-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  height: 600px;
+  background-color: #383737;
+  border-radius: 20px;
+}
+
+.me-edit-info-name-title {
+  display: flex;
+  justify-content: start;
+  width: 80%;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  font-size: larger;
+}
+
+.me-edit-info-bio-title {
+  display: flex;
+  justify-content: start;
+  width: 80%;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  font-size: larger;
+}
+
+.me-edit-info-name {
+  width: 80%;
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #242222;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
+
+.me-edit-info-bio {
+  width: 80%;
+  height: 200px;
+  padding: 10px;
+  margin-bottom: 20px;
+  resize: none;
+  background-color: #242222;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
 
 @media screen and (width < 900px) {
   .me-container {

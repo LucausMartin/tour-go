@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import { FavoriteBorder } from '@mui/icons-material';
 import image1 from '../../assets/img/1.webp';
-import avatar from '../../assets/avatar.jpg';
+import avatar from '../../assets/avatar.svg';
 
 const PlanItem: FC<{ articleID: string; userName: string }> = ({ articleID, userName }) => {
   const [imgSrc, setImgSrc] = useState<string>('');
