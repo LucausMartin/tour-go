@@ -16,20 +16,39 @@ ul, li, ol {
   list-style-type: none;
 }
 
-/* .error-message {
-  position: absolute;
-  top: 0;
+.error-message {
+  position: fixed;
+  top: -50px;
+  left: calc(50% - 250px);
+  z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100vw;
+  width: 500px;
   height: 50px;
-  font-size: large;
-  font-weight: bold;
-  background-color: rgb(255 213 239 / 67.4%);
-  backdrop-filter: blur(5px);
-  border-radius: 20px;
-} */
+  font-size: larger;
+  background-color: #a72727;
+  border-radius: 9999px;
+  opacity: 0.85;
+  transition: top 0.5s ease-in-out;
+}
+
+.error-message-show {
+  position: fixed;
+  top: 10px;
+  left: calc(50% - 250px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  height: 50px;
+  font-size: larger;
+  background-color: #a72727;
+  border-radius: 9999px;
+  opacity: 0.85;
+  transition: top 0.5s ease-in-out;
+}
 
 
 :root {
@@ -44,7 +63,7 @@ ul, li, ol {
   --active-font-color: #ff2442;
   --mask-start-color: rgb(255 255 255 / 100%);
   --mask-end-color: rgb(255 255 255 / 0%);
-  --mask-backdrop: rgb(0 0 0 / 25%);
+  --mask-backdrop: rgb(0 0 0 / 35%);
 
   overflow: hidden;
   color: var(--main-font-color);
