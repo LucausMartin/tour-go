@@ -57,7 +57,6 @@ async function fetchData<Data, Params>(
   }
   if (method === 'POST') {
     try {
-      console.log(params);
       const tokenValue = await localforage.getItem<string>('token');
       const response = await fetch(url, {
         method: 'POST',
