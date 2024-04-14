@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState, useCallback } from 'react';
 import './me.css';
 import { Button, Avatar } from '@mui/material';
 import { Edit, Logout, Close } from '@mui/icons-material';
@@ -10,11 +10,12 @@ import { useLoginState } from '@myHooks/useLoginState.ts';
 import localforage from 'localforage';
 import { useDispatch } from 'react-redux';
 import { logoutAction } from '@myStore/slices/loginSlice.ts';
-import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
+// import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
 import { Uploader, type UploaderValueItem } from 'react-vant';
 import { PopUps } from '@myComponents/PopUps/PopUps.tsx';
 import { ReactSetState } from '@myTypes/types.ts';
 import { ErrorMessage } from '@myCommon/errorMessage.ts';
+import { PartItemTypes } from '../newPlan/types.ts';
 
 export function Component() {
   return <Me></Me>;
@@ -34,9 +35,10 @@ const Me: FC = () => {
     plan: 0,
     like: 0,
     collect: 0,
-    draft: 0,
+    article: 0,
     avatar: ''
   });
+
   const getUserInfo = async () => {
     try {
       const userInfoRes = await fetchData<{
@@ -48,7 +50,7 @@ const Me: FC = () => {
         plan: number;
         like: number;
         collect: number;
-        draft: number;
+        article: number;
         history: number;
         avatar: string;
       }>('GET', {
@@ -69,7 +71,7 @@ const Me: FC = () => {
           plan: userInfoRes.data.plan,
           like: userInfoRes.data.like,
           collect: userInfoRes.data.collect,
-          draft: userInfoRes.data.draft,
+          article: userInfoRes.data.article,
           avatar: userInfoRes.data.avatar
         });
       }
@@ -84,7 +86,7 @@ const Me: FC = () => {
   return (
     <div className="me-container">
       <MeInformation userInfo={userInfo} getUserInfo={getUserInfo} />
-      <MeContent userInfo={userInfo} />
+      <MeContent getUserInfo={getUserInfo} userInfo={userInfo} />
     </div>
   );
 };
@@ -187,7 +189,7 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
           <MeEditInfo getUserInfo={getUserInfo} userInfo={userInfo} setEditInfoShow={setEditInfoShow}></MeEditInfo>
         </PopUps>
       )}
-      {followShow && <Follow followShowType={followShowType}></Follow>}
+      {followShow && <Follow followShowType={followShowType} setFollowShow={setFollowShow}></Follow>}
       <div className="me-info-container">
         <div
           className="me-info-avatar-container"
@@ -269,11 +271,11 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
       {windowSize.width && windowSize.width < 900 ? (
         <div className="me-info-data-follows-mobile">
           <div className="me-info-data-follows">
-            <span className="me-info-data-follows-text">
+            <span onClick={showFollow('follow')} className="me-info-data-follows-text">
               <span>{userInfo.follow}</span>
               <span className="me-info-data-follows-text-title">关注</span>
             </span>
-            <span className="me-info-data-follows-text">
+            <span onClick={showFollow('fans')} className="me-info-data-follows-text">
               <span>{userInfo.follower}</span>
               <span className="me-info-data-follows-text-title">粉丝</span>
             </span>
@@ -303,7 +305,7 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
   );
 };
 
-const MeContent: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
+const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userInfo, getUserInfo }) => {
   const param = useParams();
   const navigate = useNavigate();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -314,8 +316,54 @@ const MeContent: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
     like: 0,
     collect: 0,
     visitHistory: '',
-    draft: 0
+    article: 0
   });
+  const [partList, setPartList] = useState<
+    {
+      plan_id: string;
+      content: {
+        title: string;
+        plan: PartItemTypes[];
+      };
+      user: string;
+      start: number;
+    }[]
+  >([]);
+
+  const getPlansFetch = async () => {
+    const res = await fetchData<{
+      plans: {
+        plan_id: string;
+        content: string;
+        user: string;
+        start: number;
+      }[];
+    }>('GET', {
+      url: '/api/plans/get-plans'
+    });
+
+    if (res.code === 200) {
+      const newRes: {
+        plan_id: string;
+        content: {
+          title: string;
+          plan: PartItemTypes[];
+        };
+        user: string;
+        start: number;
+      }[] = [];
+
+      res.data.plans.forEach(item => {
+        newRes.push({
+          plan_id: item.plan_id,
+          content: JSON.parse(item.content),
+          user: item.user,
+          start: item.start
+        });
+      });
+      setPartList(newRes);
+    }
+  };
 
   useEffect(() => {
     if (
@@ -323,7 +371,7 @@ const MeContent: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
       (param.kind !== 'production' &&
         param.kind !== 'collect' &&
         param.kind !== 'like' &&
-        param.kind !== 'draft' &&
+        param.kind !== 'article' &&
         param.kind !== 'visitHistory')
     ) {
       navigate('production');
@@ -333,8 +381,12 @@ const MeContent: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
       collect: userInfo.collect,
       like: userInfo.like,
       visitHistory: '',
-      draft: userInfo.draft
+      article: userInfo.article
     });
+
+    if (param.kind === 'production') {
+      getPlansFetch();
+    }
   }, [navigate, userInfo, param.kind]);
 
   const changeKind = (kindKey: KindKey) => {
@@ -380,38 +432,17 @@ const MeContent: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
         ))}
         {endState && <div className="me-article-title-list-right-mask"></div>}
       </div>
-      {/* <div className="me-article-content-null">
-        <h2 className="me-article-content-null-text">暂时还没有作品在这里哦</h2>
-      </div> */}
+
       <div className="me-article-content-plan">
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
-        <PlanItem articleID="1" userName="1"></PlanItem>
+        {param.kind === 'production' && partList.length > 0 ? (
+          partList.map(item => (
+            <Plans key={item.plan_id} plan={item} getPlansFetch={getPlansFetch} getUserInfo={getUserInfo}></Plans>
+          ))
+        ) : (
+          <div className="me-article-content-null">
+            <h2 className="me-article-content-null-text">暂时还没有作品在这里哦</h2>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -449,7 +480,8 @@ const MeEditInfo: FC<{ getUserInfo: () => void; userInfo: UserInfo; setEditInfoS
   return (
     <div className="me-edit-info-container">
       <div
-        className="follow-close"
+        style={{ color: 'white' }}
+        className="me-follow-close"
         onClick={() => {
           setEditInfoShow(false);
         }}
@@ -473,16 +505,253 @@ const MeEditInfo: FC<{ getUserInfo: () => void; userInfo: UserInfo; setEditInfoS
   );
 };
 
-const Follow: FC<{ followShowType: 'follow' | 'fans' }> = ({ followShowType }) => {
+const Follow: FC<{ followShowType: 'follow' | 'fans'; setFollowShow: ReactSetState<boolean> }> = ({
+  followShowType,
+  setFollowShow
+}) => {
+  const [userArray, setUserArray] = useState<{ follow: string; follows_id: string }[]>([]);
+  const test = async (type: 'follow' | 'fans') => {
+    if (type === 'follow') {
+      const res = await fetchData<{ follows: { follow: string; follows_id: string }[] }>('GET', {
+        url: '/api/users/follows'
+      });
+      if (res.code === 200) {
+        console.log(res.data.follows);
+        setUserArray(res.data.follows);
+      }
+    } else {
+      const res = await fetchData<{ follows: { follow: string; follows_id: string }[] }>('GET', {
+        url: '/api/users/fans'
+      });
+      if (res.code === 200) {
+        setUserArray(res.data.follows);
+      }
+    }
+  };
+
+  useEffect(() => {
+    test(followShowType);
+  }, [followShowType]);
+
   return (
     <PopUps>
-      <div className="follow-container">
-        <div className="follow-close">
+      <div className="me-follow-container">
+        <div className="me-follow-close" onClick={() => setFollowShow(false)}>
           <Close />
         </div>
-        {followShowType}
+        <div className="me-follow-content">
+          {userArray.map(item => (
+            <OtherInfo key={item.follows_id} username={item.follow} id={item.follows_id} />
+          ))}
+        </div>
       </div>
     </PopUps>
+  );
+};
+
+const OtherInfo: FC<{ username: string; id: string }> = ({ username, id }) => {
+  const [userInfo, setUserInfo] = useState<{
+    name: string;
+    bio: string;
+    avatar: string;
+  }>({
+    name: '--',
+    bio: '--',
+    avatar: ''
+  });
+  const [isFollow, setIsFollow] = useState<'已关注' | '关注'>('已关注');
+
+  const getUserInfo = useCallback(async () => {
+    try {
+      const userInfoRes = await fetchData<
+        {
+          name: string;
+          bio: string;
+          avatar: string;
+        },
+        { username: string }
+      >('POST', { url: '/api/users/other-info' }, { username });
+
+      if (userInfoRes.message === 'success') {
+        // 数据校验
+        if (userInfoRes.data.bio === null) {
+          userInfoRes.data.bio = '这个人很懒，什么都没有留下';
+        }
+        setUserInfo({
+          name: userInfoRes.data.name,
+          bio: userInfoRes.data.bio,
+          avatar: userInfoRes.data.avatar
+        });
+      }
+    } catch (error) {
+      ErrorMessage('获取用户信息失败', 2000);
+    }
+  }, [username]);
+
+  useEffect(() => {
+    getUserInfo();
+  }, [getUserInfo, username]);
+
+  const stringAvatar = (name: string) => {
+    const stringToColor = (string: string) => {
+      let hash = 0;
+      let i;
+
+      for (i = 0; i < string.length; i += 1) {
+        hash = string.charCodeAt(i) + ((hash << 5) - hash);
+      }
+
+      let color = '#';
+
+      for (i = 0; i < 3; i += 1) {
+        const value = (hash >> (i * 8)) & 0xff;
+        color += `00${value.toString(16)}`.slice(-2);
+      }
+
+      return color;
+    };
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+        width: 50,
+        height: 50
+      },
+      children: name.includes(' ') ? `${name.split(' ')[0][0]}${name.split(' ')[1][0]}` : name[0]
+    };
+  };
+
+  const changeFollowState = async () => {
+    if (isFollow === '已关注') {
+      try {
+        const followRes = await fetchData('POST', { url: '/api/users/remove-follow' }, { id, removeName: username });
+        if (followRes.message === 'success') {
+          setIsFollow('关注');
+        } else {
+          ErrorMessage('取消关注失败', 2000);
+        }
+      } catch (error) {
+        ErrorMessage('取消关注失败', 2000);
+      }
+    } else {
+      try {
+        const followRes = await fetchData('POST', { url: '/api/users/add-follow' }, { followName: username });
+        if (followRes.message === 'success') {
+          setIsFollow('已关注');
+        } else {
+          ErrorMessage('关注失败', 2000);
+        }
+      } catch (error) {
+        ErrorMessage('关注失败', 2000);
+      }
+    }
+  };
+  return (
+    <div className="me-other-info-container">
+      <div className="me-other-info">
+        {userInfo.avatar === '' ? (
+          <Avatar {...stringAvatar(userInfo.name)} alt="avatar" />
+        ) : (
+          <Avatar
+            sx={{
+              width: 50,
+              height: 50
+            }}
+            src={'//' + userInfo.avatar}
+            alt="avatar"
+          />
+        )}
+        <div className="me-other-info-name">
+          <div className="me-other-info-name-content">
+            <div style={{ fontSize: '20px', fontWeight: '600' }}>{userInfo.name}</div>
+            <div style={{ fontSize: '12px', fontWeight: '300' }}>{userInfo.bio}</div>
+          </div>
+          <div onClick={changeFollowState}>
+            <Button className="me-info-data-action-edit" style={{ height: '38px' }} variant="outlined">
+              {isFollow}
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div className="me-other-info-line"></div>
+    </div>
+  );
+};
+
+const Plans: FC<{
+  plan: {
+    plan_id: string;
+    content: {
+      title: string;
+      plan: PartItemTypes[];
+    };
+    start: number;
+  };
+  getPlansFetch: () => void;
+  getUserInfo: () => void;
+}> = ({ plan, getPlansFetch, getUserInfo }) => {
+  const changePlanStartStateFetch = async (state: number) => {
+    try {
+      console.log(123);
+      const changePlanStartStateRes = await fetchData(
+        'POST',
+        { url: '/api/plans/change-start-state' },
+        { plan_id: plan.plan_id, state }
+      );
+      if (changePlanStartStateRes.code === 200) {
+        getPlansFetch();
+      }
+    } catch (error) {
+      ErrorMessage('操作失败', 2000);
+    }
+  };
+
+  const changePlanStartState = (state: number) => {
+    return () => {
+      changePlanStartStateFetch(state);
+    };
+  };
+
+  const deletePlanFetch = async () => {
+    const res = await fetchData<string, { plan_id: string }>(
+      'POST',
+      { url: '/api/plans/delete-plan' },
+      { plan_id: plan.plan_id }
+    );
+    if (res.code === 200) {
+      getPlansFetch();
+      getUserInfo();
+    } else {
+      ErrorMessage('删除失败', 2000);
+    }
+  };
+  return (
+    <>
+      <div className="me-article-plan-container">
+        <div>{plan.content.title}</div>
+        <div className="me-article-plan-action">
+          <Button className="me-info-data-action-edit" style={{ height: '38px' }} variant="outlined">
+            查看详情
+          </Button>
+          <Button
+            className={plan.start === 0 ? 'me-info-data-action-edit' : 'me-info-data-action-log-out'}
+            style={{ height: '38px' }}
+            variant={plan.start === 0 ? 'outlined' : 'contained'}
+            onClick={changePlanStartState(plan.start === 0 ? 1 : 0)}
+          >
+            {plan.start === 0 ? '开始执行' : '停止计划'}
+          </Button>
+          <Button
+            className="me-info-data-action-log-out"
+            variant="contained"
+            disableElevation
+            onClick={deletePlanFetch}
+          >
+            删除
+          </Button>
+        </div>
+      </div>
+      <div className="me-article-plan-line"></div>
+    </>
   );
 };
 

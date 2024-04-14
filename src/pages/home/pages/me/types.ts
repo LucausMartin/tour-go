@@ -1,4 +1,4 @@
-export type KindKey = 'draft' | 'like' | 'collect' | 'visitHistory' | 'production';
+export type KindKey = 'article' | 'like' | 'collect' | 'visitHistory' | 'production';
 
 interface Kinditem {
   title: string;
@@ -7,7 +7,7 @@ interface Kinditem {
 
 export const meKindList: Kinditem[] = [
   {
-    title: '作品',
+    title: '计划',
     key: 'production'
   },
   {
@@ -19,8 +19,8 @@ export const meKindList: Kinditem[] = [
     key: 'collect'
   },
   {
-    title: '草稿',
-    key: 'draft'
+    title: '文章',
+    key: 'article'
   },
   {
     title: '观看历史',
@@ -32,7 +32,7 @@ export interface TypeNum {
   production: number;
   like: number;
   collect: number;
-  draft: number;
+  article: number;
   visitHistory: string;
 }
 
@@ -45,6 +45,6 @@ export interface UserInfo {
   plan: number;
   like: number;
   collect: number;
-  draft: number;
+  article: number;
   avatar: string;
 }
