@@ -1,0 +1,133 @@
+.plan-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px 10px;
+  overflow: auto;
+  color: var(--main-font-color);
+  background-color: var(--main-background-color);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.plan-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.plan-title {
+  font-size: 22px;
+}
+
+.plan-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.plan-input {
+  padding: 0 10px;
+  background-color: var(--main-input-background-color);
+  border: none;
+  border-radius: 10px;
+  outline: none;
+}
+
+.rv-picker {
+  background-color: #c9c9c9 !important;
+}
+
+
+/* stylelint-disable-next-line selector-class-pattern */
+.rv-picker-column__item {
+  color: var(--main-font-color) !important;
+}
+
+/* stylelint-disable-next-line selector-class-pattern */
+.rv-picker__mask {
+  background-image: linear-gradient(180deg, hsl(0deg 0% 100% / 90%), hsl(0deg 0% 100% / 40%)),
+  linear-gradient(0deg, hsl(0deg 0% 100% / 90%), hsl(0deg 0% 100% / 40%)) !important;
+}
+
+.plan-add-part-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 20px;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.plan-part-container {
+  display: flex;
+  flex-direction: row;
+  width: 400px;
+  padding: 20px 0 0;
+}
+
+.plan-part-order {
+  padding-top: 3px;
+  font-size: 20px;
+}
+
+.plan-part-cancle {
+  padding-top: 6px;
+  padding-right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+
+}
+
+.plan-part-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.plan-part-content-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.plan-part-content-item-input {
+  flex: 1;
+  color: var(--main-font-color);
+}
+
+.plan-part-content-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.plan-part-map {
+  width: 80vw;
+  height: 60vh;
+  background-color: #c46262;
+}
+
+.me-info-data-action-log-out {
+  background-color: var(--main-theme-color) !important;
+}
+
+.me-info-data-action-log-out:hover {
+  background-color: var(--main-theme-hover-contained-color) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rv-picker {
+    background-color: rgb(53 53 53) !important;
+  }
+
+  /* stylelint-disable-next-line selector-class-pattern */
+  .rv-picker__mask {
+    background-image: linear-gradient(180deg, hsl(0deg 0% 20.72% / 90%), hsl(0deg 0% 71.11% / 40%)), linear-gradient(0deg, hsl(0deg 0% 19.93% / 90%), hsl(0deg 2.41% 74.43% / 40%)) !important;
+  }
+}

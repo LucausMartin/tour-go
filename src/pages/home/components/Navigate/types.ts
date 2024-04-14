@@ -7,7 +7,7 @@ import {
 } from 'react-icons/md';
 import type { IconType } from 'react-icons';
 
-export type NavListKeys = 'discover' | 'publish' | 'me' | 'more' | 'message';
+export type NavListKeys = 'discover' | 'publish' | 'me' | 'more' | 'message' | 'newPlan';
 
 interface NavItem {
   title: string;
@@ -22,7 +22,12 @@ export const NavList: NavItem[] = [
     key: 'discover'
   },
   {
-    title: '发布',
+    title: '创建',
+    icon: MdAddCircleOutline,
+    key: 'newPlan'
+  },
+  {
+    title: '计划',
     icon: MdAddCircleOutline,
     key: 'publish'
   },

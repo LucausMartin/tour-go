@@ -15,6 +15,7 @@ export const router = createBrowserRouter(
           <Route caseSensitive path=":kind" element={<></>} />
         </Route>
         <Route caseSensitive path="publish" lazy={() => import('./pages/home/pages/publish/Publish.tsx')} />
+        <Route caseSensitive path="newPlan" lazy={() => import('./pages/home/pages/newPlan/NewPlan.tsx')} />
         <Route caseSensitive path="message" lazy={() => import('./pages/home/pages/message/Message.tsx')}>
           <Route caseSensitive path=":kind" element={<></>}></Route>
         </Route>
