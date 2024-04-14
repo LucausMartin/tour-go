@@ -1,0 +1,133 @@
+.publish-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.publish-change-plan {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.publish-select-plans {
+  position: absolute;
+  top: 39px;
+  right: 10px;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  padding: 5px 0;
+  background-color: var(--select-background-color);
+  border-radius: 8px;
+}
+
+.publish-select-plans-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.publish-select-plans-item:hover {
+  background-color: var(--active-background-hover-color);
+}
+
+.publish-no-content-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.publish-start-plan-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-top: 40px;
+}
+
+.publish-start-plan-title {
+  padding-bottom: 20px;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.publish-start-plan-item-container {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+}
+
+.publish-start-plan-item-progress-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 28px;
+  height: 100%;
+}
+
+.publish-start-plan-item-progress-line {
+  width: 10px;
+  height: 100%;
+  background-color: var(--publish-progress-line-color);
+}
+
+.publish-start-plan-item-progress-line-complate {
+  width: 10px;
+  height: 100%;
+  background-color: var(--publish-progress-line-color-complate);
+}
+
+.publish-start-plan-item-progress-ball {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  background-color: hotpink;
+  border-radius: 100%;
+}
+
+.publish-start-plan-item-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 10px 20px;
+}
+
+.publish-start-plan-item-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+@media screen and (width < 1200px) {
+  .publish-start-plan-item-container {
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+  }
+}
+
+@media screen and (width < 900px) {
+  .publish-start-plan-item-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+}
