@@ -50,12 +50,12 @@ ul, li, ol {
   transition: top 0.5s ease-in-out;
 }
 
-
 :root {
   --main-theme-color: rgb(179 69 113);
   --main-theme-hover-outlined-color: rgb(179 69 113 / 25.3%);
   --main-theme-hover-contained-color:rgb(146 25 73);
   --main-background-color: #fff;
+  --main-popup-background-color: #e9e9e9;
   --active-background-color: rgb(0 0 0 / 6%);
   --main-font-color: #0a0a0a;
   --inactive-font-color: rgb(51 51 51 / 70%);
@@ -64,7 +64,12 @@ ul, li, ol {
   --mask-start-color: rgb(255 255 255 / 100%);
   --mask-end-color: rgb(255 255 255 / 0%);
   --mask-backdrop: rgb(0 0 0 / 35%);
-
+  --main-input-background-color: #c9c9c9;
+  --active-background-hover-color: #cfcfcf;
+  --select-background-color: #dbdbdb;
+  --publish-progress-line-color: rgb(117 117 117);
+  --publish-progress-line-color-complate: rgb(5 153 5);
+  
   overflow: hidden;
   color: var(--main-font-color);
   background-color: var(--main-background-color);
@@ -79,5 +84,9 @@ ul, li, ol {
     --main-icon-color: #fff;
     --mask-start-color: rgb(0 0 0 / 100%);
     --mask-end-color: rgb(0 0 0 / 0%);
+    --main-popup-background-color: #2e2e2e;
+    --main-input-background-color: #353535;
+    --active-background-hover-color: #666464;
+    --select-background-color: #474747;
   }
 }
