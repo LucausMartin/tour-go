@@ -7,9 +7,11 @@ import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
 import { FavoriteBorderOutlined, GradeOutlined, MarkChatUnreadOutlined } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectLogin, readyLoginAction } from '@myStore/slices/loginSlice.ts';
+import { selectMessage } from '@myStore/slices/messageSlice.ts';
 
 export const NavigateBar: FC = () => {
   const loginState = useSelector(selectLogin);
+  const messageState = useSelector(selectMessage);
   const dispatch = useDispatch();
   const location = useMatchLocation('navigate');
 
@@ -139,7 +141,14 @@ export const NavigateBar: FC = () => {
                       : ''
                 }}
               />
-              <span>{item.title}</span>
+              {item.key === 'message' ? (
+                <span style={{ position: 'relative' }}>
+                  {item.title}
+                  {messageState.count > 0 && <div className="nav-list-content-message-count">{messageState.count}</div>}
+                </span>
+              ) : (
+                <span>{item.title}</span>
+              )}
             </div>
           </div>
         )

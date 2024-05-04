@@ -7,8 +7,10 @@
 }
 
 .message-main-area {
+  position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 60%;
   height: 100vh;
 }
@@ -37,4 +39,115 @@
   height: 1px;
   margin: 16px 0;
   background-color: var(--inactive-font-color);
+}
+
+.message-content-container {
+  width: 100%;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.message-content-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.message-follow-item-avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.message-follow-item-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-follow-item-follow {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap:10px;
+  align-items: center;
+  height: 100%
+}
+
+.message-follow-item-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.message-follow-item-article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 100%;
+}
+
+.message-follow-item-article-cover {
+  flex: 1;
+  width: 100%;
+  height: 75%;
+  object-fit: cover;
+}
+
+.message-follow-item-article-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-follow-item-article-title {
+  width: 100%;
+  height: 20%;
+  overflow: hidden;
+  color: var(--main-font-color);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-follow-item-container-temp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.message-follow-item-container-comment {
+  overflow: hidden;
+  color: var(--main-font-color);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-read-all {
+  position: fixed !important;
+  bottom: 0 !important;
+}
+
+@media screen and (width < 1200px) {
+  .message-main-area {
+    width: 80%;
+  } 
+}
+
+@media screen and (width < 900px) {
+  .message-main-area {
+    width: 100%;
+  }
+
+  .message-read-all {
+    position: fixed !important;
+    bottom: 58px !important;
+  }
 }

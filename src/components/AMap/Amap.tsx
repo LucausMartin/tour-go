@@ -36,15 +36,8 @@ const MapContainer: FC<{
         //     // @ts-expect-error status is any
         //     AMap.convertFrom([pos.coords.longitude, pos.coords.latitude], 'gps', function (status, result) {
         //       if (result.info === 'ok') {
-        //         const lnglat = result.locations[0];
-        //         console.log(lnglat);
-        //         // 再次标点
-        //         const marker = new AMap.Marker({
-        //           position: lnglat,
-        //           title: '当前位置'
-        //         });
-        //         map.add(marker);
-        //         map.setCenter(lnglat);
+        //         const nowLocation = result.locations[0];
+        //         console.log(nowLocation);
         //       }
         //     });
         //   },

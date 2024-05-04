@@ -10,6 +10,7 @@
   position: fixed;
   top: 0;
   left: 200px;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,8 +27,17 @@
   padding: 0 50px 0 20px;
   font-size: 16px;
   line-height: 120%;
-  caret-color: var(--active-font-color);
   background-color: var(--active-background-color);
+  border: none;
+  border-radius: 20px;
+  outline: none;
+}
+
+.discover-search-input {
+  width: 100%;
+  height: 100%;
+  caret-color: var(--active-font-color);
+  background-color: #0000;
   border: none;
   border-radius: 20px;
   outline: none;
@@ -41,6 +51,7 @@
 }
 
 .discover-kind {
+  z-index: 0;
   display: flex;
   flex-direction: row;
   gap: 10px;
@@ -75,13 +86,14 @@
 
 .discover-content {
   flex: 1;
-  overflow: auto;;
+  overflow: auto;
   background-color: var(--main-background-color);
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none /* IE 10+, edge */
 }
 
 .discover-content-item {
+  position: relative;
   display: inline-flex;
   flex-direction: column;
   gap: 12px;
@@ -90,11 +102,21 @@
   padding-bottom: 24px;
 }
 
+.discover-content-item-cover-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 170px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
 .discover-content-item-cover {
   width: 100%;
-  overflow: hidden;
+  height: 100%;
   object-fit: cover;
-  border-radius: 16px;
 }
 
 .discover-content-item-info {
@@ -106,6 +128,10 @@
 .discover-content-item-description {
   overflow: hidden;
   text-overflow: ellipsis;
+
+  /* 超出省略号显示 */
+  white-space: nowrap;
+
 }
 
 .discover-content-item-article-info {
@@ -201,6 +227,33 @@
 .discover-top-bar-list::-webkit-scrollbar {
   display: none;
   width: 0;
+}
+
+.discover-search-conetent {
+  position: relative;
+  top: 10px;
+  left: 14px;
+  z-index:2;
+  width: 100%;
+  height: 60dvh;
+  padding: 20px 10px;
+  background-color: var(--main-popup-background-color);
+}
+
+.discover-search-history-content {
+/* 5 * 2 的网格 */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  height: 100%;
+}
+
+.discover-search-history {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  height: 50%;
 }
 
 .discover-top-bar-list-item {

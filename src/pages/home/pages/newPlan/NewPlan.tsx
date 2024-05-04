@@ -64,16 +64,6 @@ const NewPlan: FC = () => {
           }
         }
       );
-      console.log(
-        JSON.parse(
-          JSON.stringify({
-            content: {
-              title: title,
-              plan: partList
-            }
-          })
-        )
-      );
       if (res.code === 200) {
         ErrorMessage('创建成功', 2000);
         return;

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import loginSlice from './slices/loginSlice.ts';
+import messageSlice from './slices/messageSlice.ts';
 
 const store = configureStore({
   reducer: {
-    loginer: loginSlice
+    loginer: loginSlice,
+    messager: messageSlice
   }
 });
 

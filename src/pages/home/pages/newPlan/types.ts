@@ -7,4 +7,8 @@ export interface PartItemTypes {
   takeThings: string;
   tips: string;
   addressName: string;
+  img?: string | null;
+  imgName?: string | null;
+  text?: string | null;
+  loading?: false;
 }

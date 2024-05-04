@@ -2,6 +2,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  overflow: auto;
 }
 
 .publish-change-plan {
@@ -52,12 +54,35 @@
   height: 100vh;
 }
 
+.publish-start-plan-item-take {
+  padding-bottom: 10px;
+}
+
 .publish-start-plan-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100vh;
   padding-top: 40px;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.publish-start-plan-item-img {
+  width: 200px;
+  height: 20%;
+  margin-bottom: 10px;
+}
+
+.publish-start-plan-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.publish-start-plan-item-img-show {
+  width: 100%;
 }
 
 .publish-start-plan-title {
@@ -116,18 +141,93 @@
   font-weight: 500;
 }
 
+.publish-start-plan-cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+.publish-start-plan-item-textarea-container {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.publish-start-plan-item-textarea {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 10px;
+  color: var(--main-font-color);
+  background-color: var(--main-background-color);
+}
+
+.publish-start-plan-choose-label {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%;
+  margin: 10px 0;
+}
+
+.publish-start-plan-choose-label-item {
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: rgb(209 238 243 / 36.3%);
+  border: 1px solid rgb(86 169 236);
+  border-radius: 20px;
+}
+
+.publish-start-plan-choose-label-item-select {
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: rgb(105 207 130 / 76%);
+  border: 1px solid rgb(86 169 236);
+  border-radius: 20px;
+}
+
 @media screen and (width < 1200px) {
   .publish-start-plan-item-container {
     display: flex;
     flex-direction: row;
     width: 70%;
   }
+
+  .publish-start-plan-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+  }
+
+  .publish-start-plan-choose-label {
+    display: flex;
+    flex-wrap: wrap;
+    width: 70%;
+  }
+  
 }
 
 @media screen and (width < 900px) {
   .publish-start-plan-item-container {
     display: flex;
     flex-direction: row;
+    width: 100%;
+  }
+
+  .publish-start-plan-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .publish-start-plan-choose-label {
+    display: flex;
+    flex-wrap: wrap;
     width: 100%;
   }
 }

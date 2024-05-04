@@ -1,0 +1,267 @@
+.article-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.article-content-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 10px 0;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.article-content-container::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.article-content-title {
+  font-size: 40px;
+  font-weight: 500;
+}
+
+.article-content-cover {
+  width: 100%;
+  max-height: 50%;
+}
+
+.article-content-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-content-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+  width: 100%;
+}
+
+.article-plan-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-plan-text {
+  font-size: 20px;
+}
+
+.article-user-container {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  align-self: flex-end;
+  justify-content: center;
+  padding-right: 20px;
+}
+
+.article-user-avatar {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.article-user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-user-name {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.article-user-info {
+  position: relative;
+  left: -10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 5px;
+}
+
+.article-user-bio {
+  font-size: 16px;
+  font-weight: 200;
+}
+
+.article-action-container {
+  position: fixed;
+  right: 10px;
+  bottom: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.article-icon {
+  font-size: 50px !important;
+  fill: var(--main-font-color);
+}
+
+.article-action {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.article-comment-mobile {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60%;
+  background-color: aqua;
+}
+
+.article-comment {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  height: 50%;
+  padding: 25px 10px 0;
+  background-color: #cfcfcf;
+}
+
+.article-comment-close {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.article-comments {
+  flex: 1;
+  overflow: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+, edge */
+}
+
+.article-comments::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.article-add-comment {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  background-color: #e4e4e4;
+}
+
+.article-add-comment-button {
+  width: 100px;
+  height: 50px;
+  color: rgb(255 255 255);
+  cursor: pointer;
+  background-color: var(--main-theme-color);
+  border: 0;
+}
+
+.article-add-comment-input {
+  flex: 1;
+  height: 50px;
+  padding: 0 10px;
+  font-size: 16px;
+  color: #000;
+  background-color: #e4e4e4;
+  border: 0;
+  border-radius: 9999px;
+}
+
+.article-comment-content {
+  width: 100%;
+  padding: 5px
+}
+
+.article-comment-content-user {
+  display: flex;
+  flex-direction: row;
+}
+
+.article-comment-content-user-avatar {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.article-comment-content-user-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.article-comment-content-user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.article-comment-content-user-comment {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.article-comment-content-user-name {
+  font-size: 16px;
+  font-weight: 100;
+}
+
+.article-comment-content-time {
+  padding-left: 60px;
+  font-size: 16px;
+  font-weight: 100;
+}
+
+@media screen and (width < 1200px) {
+  .article-comment {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 60%;
+    height: 50%;
+  }
+}
+
+@media screen and (width < 900px) {
+  .article-comment {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+  }
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .article-comment {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 50%;
+    background-color: #222;
+  }
+}

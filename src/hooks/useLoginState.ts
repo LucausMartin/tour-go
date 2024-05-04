@@ -14,7 +14,12 @@ export const useLoginState = () => {
       }
       // 如果时间戳不存在或者时间戳加七天小于当前时间戳，就将登录状态设置为 logout
       if (!time || time + 7 * 24 * 60 * 60 * 1000 < Date.now()) {
-        navigate('/home/discover/recommand');
+        // 正则匹配 /home/article/任意字符串 路径
+        if (/^\/home\/article\/.*/.test(location.pathname)) {
+          navigate(location.pathname);
+        } else {
+          navigate('/home/discover/recommand');
+        }
       } else {
         dispatch(loginAction());
       }

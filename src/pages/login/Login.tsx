@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Card, TextField, CardContent, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { PopUps } from '@myComponents/PopUps/PopUps.tsx';
@@ -6,7 +6,7 @@ import { Typewriter } from '@myComponents/TypeWriter/TypeWriter.tsx';
 import { ErrorMessageType, ErrorMessage, ForgetPasswordErrorMessage, ForgetPasswordErrorMessageType } from './types.ts';
 import { Login, VisibilityOff, Visibility, ArrowBackIosNew, Close, Check } from '@mui/icons-material';
 import { fetchData } from '@myCommon/fetchData.ts';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginAction, logoutAction } from '@myStore/slices/loginSlice.ts';
 import JSEncrypt from 'jsencrypt';
@@ -17,8 +17,11 @@ import './login.css';
 const encryptor = new JSEncrypt();
 
 const LoginPopUps: FC = () => {
+  // 获取从哪个路由过来的
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [preRoute, setPreRoute] = useState<string>(location.pathname);
   const [loadingButtonState, setLoadingButtonState] = useState<'login' | 'register'>('login');
   const [loading, setLoading] = useState<boolean>(false);
   const [errorType, setErrorType] = useState<ErrorMessageType>('default');
@@ -39,6 +42,10 @@ const LoginPopUps: FC = () => {
   const [forgetConfirmPassword, setForgetConfirmPassword] = useState<string>('');
   const [forgetFocusUsernameState, setForgetFocusUsernameState] = useState<boolean>(false);
   const [newPasswordShow, setNewPasswordShow] = useState<boolean>(false);
+
+  useEffect(() => {
+    setPreRoute(location.pathname);
+  }, [location.pathname]);
 
   const getEncrypted = async (password: string) => {
     // 获取公钥
@@ -72,6 +79,10 @@ const LoginPopUps: FC = () => {
       await localforage.setItem('time', res.data.time);
       dispatch(loginAction());
       setLoading(false);
+      if (/^\/home\/article\/.*/.test(preRoute)) {
+        navigate(preRoute);
+        return true;
+      }
       navigate('/home/discover/recommand');
       return true;
       // 密码错误
@@ -213,12 +224,10 @@ const LoginPopUps: FC = () => {
       );
       // 不存在用户
       if (hasUser.code === 200 && hasUser.data.hasUser === false) {
-        console.log('不存在用户');
         setForgetPasswordErrorType('usernameError');
         setForgetLoading(false);
         //存在用户
       } else if (hasUser.code === 200 && hasUser.data.hasUser === true) {
-        console.log('存在用户');
         // 获得密文
         const encryptedCertifyCharacters = await getEncrypted(forgetCertifyCharacters);
         const res = await fetchData<never, { username: string; certifyCharacters: string }>(

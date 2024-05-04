@@ -1,4 +1,4 @@
-export type KindKey = 'comment' | 'likeCollect' | 'fans';
+export type KindKey = 'comment' | 'likeCollect' | 'fans' | 'share';
 
 interface Kinditem {
   title: string;
@@ -7,15 +7,19 @@ interface Kinditem {
 
 export const messageKindList: Kinditem[] = [
   {
-    title: '评论',
-    key: 'comment'
+    title: '新增粉丝',
+    key: 'fans'
   },
   {
-    title: '赞和收藏',
+    title: '点赞收藏',
     key: 'likeCollect'
   },
   {
-    title: '新增粉丝',
-    key: 'fans'
+    title: '分享',
+    key: 'share'
+  },
+  {
+    title: '评论',
+    key: 'comment'
   }
 ];

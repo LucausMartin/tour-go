@@ -10,20 +10,15 @@ import { useLoginState } from '@myHooks/useLoginState.ts';
 import localforage from 'localforage';
 import { useDispatch } from 'react-redux';
 import { logoutAction } from '@myStore/slices/loginSlice.ts';
-// import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
+import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
 import { Uploader, type UploaderValueItem } from 'react-vant';
 import { PopUps } from '@myComponents/PopUps/PopUps.tsx';
 import { ReactSetState } from '@myTypes/types.ts';
 import { ErrorMessage } from '@myCommon/errorMessage.ts';
 import { PartItemTypes } from '../newPlan/types.ts';
+import { addMessage } from '@myStore/slices/messageSlice.ts';
 
-export function Component() {
-  return <Me></Me>;
-}
-
-const Me: FC = () => {
-  const pararm = useParams();
-  console.log(pararm);
+export const Me: FC = () => {
   useLoginState();
 
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -104,6 +99,29 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
     localforage.removeItem('token');
     localforage.removeItem('time');
     dispatch(logoutAction());
+    dispatch(
+      addMessage({
+        count: 0,
+        typeList: {
+          comments: {
+            count: 0,
+            list: []
+          },
+          likeCollects: {
+            count: 0,
+            list: []
+          },
+          fans: {
+            count: 0,
+            list: []
+          },
+          shares: {
+            count: 0,
+            list: []
+          }
+        }
+      })
+    );
     navigate('/home/discover/recommand');
   };
 
@@ -112,10 +130,6 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
       setFollowShowType(type);
       setFollowShow(true);
     };
-  };
-
-  const changeAvatar = () => {
-    console.log('change avatar');
   };
 
   const showEditAvatar = (showType: boolean) => {
@@ -160,7 +174,6 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
     }
     const formData = new FormData();
     formData.append('avatar', file);
-    console.log(formData.get('avatar'));
     try {
       const uploadAvatarRes = await fetchData(
         'POST',
@@ -189,13 +202,14 @@ const MeInformation: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ us
           <MeEditInfo getUserInfo={getUserInfo} userInfo={userInfo} setEditInfoShow={setEditInfoShow}></MeEditInfo>
         </PopUps>
       )}
-      {followShow && <Follow followShowType={followShowType} setFollowShow={setFollowShow}></Follow>}
+      {followShow && (
+        <Follow followShowType={followShowType} setFollowShow={setFollowShow} getUserInfo={getUserInfo}></Follow>
+      )}
       <div className="me-info-container">
         <div
           className="me-info-avatar-container"
           onMouseEnter={showEditAvatar(true)}
           onMouseLeave={showEditAvatar(false)}
-          onClick={changeAvatar}
         >
           {editAvatarShow && (
             <div className="me-info-avatar-edit">
@@ -318,7 +332,7 @@ const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userIn
     visitHistory: '',
     article: 0
   });
-  const [partList, setPartList] = useState<
+  const [planList, setPlanList] = useState<
     {
       plan_id: string;
       content: {
@@ -329,6 +343,40 @@ const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userIn
       start: number;
     }[]
   >([]);
+  const [articleList, setArticleList] = useState<
+    {
+      article_id: string;
+      content: {
+        title: string;
+        plan: PartItemTypes[];
+      };
+      user: string;
+    }[]
+  >([]);
+
+  const [likeArticle, setLikeArticle] = useState<
+    | {
+        article_id: string;
+        user: string;
+      }[]
+    | null
+  >(null);
+
+  const [collectArticle, setCollectArticle] = useState<
+    | {
+        article_id: string;
+        user: string;
+      }[]
+    | null
+  >(null);
+
+  const [historyArticle, setHistoryArticle] = useState<
+    | {
+        article_id: string;
+        user: string;
+      }[]
+    | null
+  >(null);
 
   const getPlansFetch = async () => {
     const res = await fetchData<{
@@ -361,7 +409,102 @@ const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userIn
           start: item.start
         });
       });
-      setPartList(newRes);
+      setPlanList(newRes);
+    }
+  };
+
+  const getArticlesFetch = async () => {
+    const res = await fetchData<{
+      articles: {
+        article_id: string;
+        content: string;
+        user: string;
+      }[];
+    }>('GET', {
+      url: '/api/articles/get-articles'
+    });
+
+    if (res.code === 200) {
+      const newRes: {
+        article_id: string;
+        content: {
+          title: string;
+          plan: PartItemTypes[];
+        };
+        user: string;
+      }[] = [];
+
+      res.data.articles.forEach(item => {
+        newRes.push({
+          article_id: item.article_id,
+          content: JSON.parse(item.content),
+          user: item.user
+        });
+      });
+      setArticleList(newRes);
+    }
+  };
+
+  const getLikesFetch = async () => {
+    try {
+      const res = await fetchData<{
+        likes: {
+          article_id: string;
+          user: string;
+        }[];
+      }>('GET', {
+        url: '/api/likes/get-likes'
+      });
+
+      if (res.code === 200) {
+        setLikeArticle(res.data.likes);
+      } else {
+        ErrorMessage('获取点赞文章失败', 2000);
+      }
+    } catch (error) {
+      ErrorMessage('获取点赞文章失败', 2000);
+    }
+  };
+
+  const getCollectFetch = async () => {
+    try {
+      const res = await fetchData<{
+        collects: {
+          article_id: string;
+          user: string;
+        }[];
+      }>('GET', {
+        url: '/api/collects/get-collects'
+      });
+
+      if (res.code === 200) {
+        setCollectArticle(res.data.collects);
+      } else {
+        ErrorMessage('获取收藏文章失败', 2000);
+      }
+    } catch (error) {
+      ErrorMessage('获取收藏文章失败', 2000);
+    }
+  };
+
+  const getHistoryFetch = async () => {
+    try {
+      const res = await fetchData<{
+        histories: {
+          article_id: string;
+          user: string;
+        }[];
+      }>('GET', {
+        url: '/api/histories/get-histories'
+      });
+
+      if (res.code === 200) {
+        setHistoryArticle(res.data.histories);
+      } else {
+        ErrorMessage('获取收藏文章失败', 2000);
+      }
+    } catch (error) {
+      ErrorMessage('获取收藏文章失败', 2000);
     }
   };
 
@@ -376,6 +519,7 @@ const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userIn
     ) {
       navigate('production');
     }
+
     setTypeNum({
       production: userInfo.plan,
       collect: userInfo.collect,
@@ -386,6 +530,18 @@ const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userIn
 
     if (param.kind === 'production') {
       getPlansFetch();
+    }
+    if (param.kind === 'article') {
+      getArticlesFetch();
+    }
+    if (param.kind === 'like') {
+      getLikesFetch();
+    }
+    if (param.kind === 'collect') {
+      getCollectFetch();
+    }
+    if (param.kind === 'visitHistory') {
+      getHistoryFetch();
     }
   }, [navigate, userInfo, param.kind]);
 
@@ -434,15 +590,86 @@ const MeContent: FC<{ userInfo: UserInfo; getUserInfo: () => void }> = ({ userIn
       </div>
 
       <div className="me-article-content-plan">
-        {param.kind === 'production' && partList.length > 0 ? (
-          partList.map(item => (
-            <Plans key={item.plan_id} plan={item} getPlansFetch={getPlansFetch} getUserInfo={getUserInfo}></Plans>
-          ))
-        ) : (
-          <div className="me-article-content-null">
-            <h2 className="me-article-content-null-text">暂时还没有作品在这里哦</h2>
-          </div>
-        )}
+        {param.kind === 'production' &&
+          (planList.length > 0 ? (
+            planList.map(item => (
+              <Plans key={item.plan_id} plan={item} getPlansFetch={getPlansFetch} getUserInfo={getUserInfo}></Plans>
+            ))
+          ) : (
+            <div className="me-article-content-null">
+              <h2 className="me-article-content-null-text">暂时还没有作品在这里哦</h2>
+            </div>
+          ))}
+        {param.kind === 'article' &&
+          (articleList.length > 0 ? (
+            articleList.map(item => {
+              return (
+                <PlanItem
+                  key={item.article_id}
+                  articleID={item.article_id}
+                  userName={item.user}
+                  type="me"
+                  getArticlesFetch={getArticlesFetch}
+                  getSelfUserInfo={getUserInfo}
+                ></PlanItem>
+              );
+            })
+          ) : (
+            <div className="me-article-content-null">
+              <h2 className="me-article-content-null-text">暂时还没有文章在这里哦</h2>
+            </div>
+          ))}
+        {param.kind === 'like' &&
+          (likeArticle && likeArticle.length > 0 ? (
+            likeArticle.map(item => {
+              return (
+                <PlanItem
+                  key={item.article_id}
+                  articleID={item.article_id}
+                  userName={item.user}
+                  type="other"
+                ></PlanItem>
+              );
+            })
+          ) : (
+            <div className="me-article-content-null">
+              <h2 className="me-article-content-null-text">暂时还没有文章在这里哦</h2>
+            </div>
+          ))}
+        {param.kind === 'collect' &&
+          (collectArticle && collectArticle.length > 0 ? (
+            collectArticle.map(item => {
+              return (
+                <PlanItem
+                  key={item.article_id}
+                  articleID={item.article_id}
+                  userName={item.user}
+                  type="other"
+                ></PlanItem>
+              );
+            })
+          ) : (
+            <div className="me-article-content-null">
+              <h2 className="me-article-content-null-text">暂时还没有文章在这里哦</h2>
+            </div>
+          ))}
+        {param.kind === 'visitHistory' &&
+          (historyArticle && historyArticle.length > 0 ? (
+            historyArticle.map(item => {
+              return (
+                <PlanItem
+                  key={item.article_id}
+                  articleID={item.article_id}
+                  userName={item.user}
+                  type="other"
+                ></PlanItem>
+              );
+            })
+          ) : (
+            <div className="me-article-content-null">
+              <h2 className="me-article-content-null-text">暂时还没有文章在这里哦</h2>
+            </div>
+          ))}
       </div>
     </div>
   );
@@ -505,18 +732,18 @@ const MeEditInfo: FC<{ getUserInfo: () => void; userInfo: UserInfo; setEditInfoS
   );
 };
 
-const Follow: FC<{ followShowType: 'follow' | 'fans'; setFollowShow: ReactSetState<boolean> }> = ({
-  followShowType,
-  setFollowShow
-}) => {
+const Follow: FC<{
+  followShowType: 'follow' | 'fans';
+  setFollowShow: ReactSetState<boolean>;
+  getUserInfo: () => void;
+}> = ({ followShowType, setFollowShow, getUserInfo }) => {
   const [userArray, setUserArray] = useState<{ follow: string; follows_id: string }[]>([]);
-  const test = async (type: 'follow' | 'fans') => {
+  const getFollow = async (type: 'follow' | 'fans') => {
     if (type === 'follow') {
       const res = await fetchData<{ follows: { follow: string; follows_id: string }[] }>('GET', {
         url: '/api/users/follows'
       });
       if (res.code === 200) {
-        console.log(res.data.follows);
         setUserArray(res.data.follows);
       }
     } else {
@@ -530,7 +757,7 @@ const Follow: FC<{ followShowType: 'follow' | 'fans'; setFollowShow: ReactSetSta
   };
 
   useEffect(() => {
-    test(followShowType);
+    getFollow(followShowType);
   }, [followShowType]);
 
   return (
@@ -541,7 +768,14 @@ const Follow: FC<{ followShowType: 'follow' | 'fans'; setFollowShow: ReactSetSta
         </div>
         <div className="me-follow-content">
           {userArray.map(item => (
-            <OtherInfo key={item.follows_id} username={item.follow} id={item.follows_id} />
+            <OtherInfo
+              key={item.follows_id}
+              username={item.follow}
+              id={item.follows_id}
+              followShowType={followShowType}
+              getFollow={getFollow}
+              getSelfUserInfo={getUserInfo}
+            />
           ))}
         </div>
       </div>
@@ -549,7 +783,13 @@ const Follow: FC<{ followShowType: 'follow' | 'fans'; setFollowShow: ReactSetSta
   );
 };
 
-const OtherInfo: FC<{ username: string; id: string }> = ({ username, id }) => {
+const OtherInfo: FC<{
+  username: string;
+  id: string;
+  followShowType: 'follow' | 'fans';
+  getFollow: (type: 'follow' | 'fans') => void;
+  getSelfUserInfo: () => void;
+}> = ({ username, id, followShowType, getFollow, getSelfUserInfo }) => {
   const [userInfo, setUserInfo] = useState<{
     name: string;
     bio: string;
@@ -559,7 +799,9 @@ const OtherInfo: FC<{ username: string; id: string }> = ({ username, id }) => {
     bio: '--',
     avatar: ''
   });
-  const [isFollow, setIsFollow] = useState<'已关注' | '关注'>('已关注');
+  const [isFollow, setIsFollow] = useState<'已关注' | '关注' | '移除粉丝'>(
+    followShowType === 'fans' ? '移除粉丝' : '已关注'
+  );
 
   const getUserInfo = useCallback(async () => {
     try {
@@ -626,22 +868,36 @@ const OtherInfo: FC<{ username: string; id: string }> = ({ username, id }) => {
         const followRes = await fetchData('POST', { url: '/api/users/remove-follow' }, { id, removeName: username });
         if (followRes.message === 'success') {
           setIsFollow('关注');
+          getSelfUserInfo();
         } else {
           ErrorMessage('取消关注失败', 2000);
         }
       } catch (error) {
         ErrorMessage('取消关注失败', 2000);
       }
-    } else {
+    } else if (isFollow === '关注') {
       try {
         const followRes = await fetchData('POST', { url: '/api/users/add-follow' }, { followName: username });
         if (followRes.message === 'success') {
           setIsFollow('已关注');
+          getSelfUserInfo();
         } else {
           ErrorMessage('关注失败', 2000);
         }
       } catch (error) {
         ErrorMessage('关注失败', 2000);
+      }
+    } else {
+      try {
+        const followRes = await fetchData('POST', { url: '/api/users/remove-fans' }, { removeName: username });
+        if (followRes.message === 'success') {
+          getFollow('fans');
+          getSelfUserInfo();
+        } else {
+          ErrorMessage('移除粉丝失败', 2000);
+        }
+      } catch (error) {
+        ErrorMessage('移除粉丝失败', 2000);
       }
     }
   };
@@ -691,7 +947,6 @@ const Plans: FC<{
 }> = ({ plan, getPlansFetch, getUserInfo }) => {
   const changePlanStartStateFetch = async (state: number) => {
     try {
-      console.log(123);
       const changePlanStartStateRes = await fetchData(
         'POST',
         { url: '/api/plans/change-start-state' },

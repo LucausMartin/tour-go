@@ -8,11 +8,12 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
 import { MaskDialog } from '@myComponents/MaskDialog/MaskDialog.tsx';
-import { LoginPopUps } from '../../../login/Login.tsx';
-import { useSelector } from 'react-redux';
-import { selectLogin } from '@myStore/slices/loginSlice.ts';
+import { ErrorMessage } from '@myCommon/errorMessage.ts';
+import { useDispatch } from 'react-redux';
+import { addMessage } from '@myStore/slices/messageSlice.ts';
 import { useLoginState } from '@myHooks/useLoginState.ts';
 import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
+import { fetchData } from '@myCommon/fetchData.ts';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
@@ -205,9 +206,33 @@ import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
 
 const Discover: FC = () => {
   useLoginState();
-  const loginState = useSelector(selectLogin);
+  const dispatch = useDispatch();
+  // const loginState = useSelector(selectLogin);
   const windowSize = useWindowSize();
   const [searchPageShow, setSearchPageShow] = useState(false);
+  const getUnreadMessageFetch = async () => {
+    try {
+      const res = await fetchData<{
+        message: {
+          message_id: string;
+          content: string;
+          user: string;
+          like: number;
+        };
+      }>('GET', {
+        url: `/api/messages/get-unread-messages`
+      });
+
+      if (res.code === 200) {
+        dispatch(addMessage(res.data));
+      }
+    } catch (e) {
+      ErrorMessage('获取未读消息失败', 2000);
+    }
+  };
+  useEffect(() => {
+    getUnreadMessageFetch();
+  });
   return (
     <div className="discover-container">
       {windowSize.width && windowSize.width >= 900 ? (
@@ -223,16 +248,157 @@ const Discover: FC = () => {
         </>
       )}
       <Outlet />
-      {loginState === 'ready' ? <LoginPopUps /> : <></>}
+      {/* {loginState === 'ready' ? <LoginPopUps /> : <></>} */}
     </div>
   );
 };
 
 const DiscoverSearch: FC = () => {
+  const navgate = useNavigate();
+  const [searchValue, setSearchValue] = useState('');
+  const [searchContentShow, setSearchContentShow] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [mostLike, setMostLike] = useState<{
+    articles: {
+      article_id: string;
+      content: {
+        title: string;
+      };
+    }[];
+  }>();
+
+  const sendSearch = () => {
+    addSearchHistoryFetch();
+    navgate(`/home/search/${searchValue}`);
+  };
+
+  const searchContent = (content: string) => {
+    return () => {
+      navgate(`/home/search/${content}`);
+    };
+  };
+
+  const addSearchHistoryFetch = async () => {
+    try {
+      const res = await fetchData<
+        {
+          message: {
+            message_id: string;
+            content: string;
+            user: string;
+            like: number;
+          };
+        },
+        {
+          content: string;
+        }
+      >(
+        'POST',
+        {
+          url: `/api/searchs/add-search-content-history`
+        },
+        {
+          content: searchValue
+        }
+      );
+
+      if (res.code !== 200) {
+        ErrorMessage('添加搜索历史失败', 2000);
+      }
+    } catch (e) {
+      ErrorMessage('添加搜索历史失败', 2000);
+    }
+  };
+
+  const getSearchHistoryFetch = async () => {
+    try {
+      const res = await fetchData<{
+        searchHistory: string[];
+      }>('GET', {
+        url: `/api/searchs/get-search-content-history`
+      });
+
+      if (res.code === 200) {
+        setSearchHistory(res.data.searchHistory);
+      }
+    } catch (e) {
+      ErrorMessage('获取搜索历史失败', 2000);
+    }
+  };
+
+  const getMostLikeFetch = async () => {
+    try {
+      const res = await fetchData<{
+        articles: {
+          article_id: string;
+          content: {
+            title: string;
+          };
+        }[];
+      }>('GET', {
+        url: `/api/searchs/get-most-likes-articles`
+      });
+
+      if (res.code === 200) {
+        setMostLike(res.data);
+      }
+    } catch (e) {
+      ErrorMessage('获取最受欢迎的文章失败', 2000);
+    }
+  };
+
+  const toArticle = (articleID: string) => {
+    return () => {
+      navgate(`/home/search/article/${articleID}`);
+    };
+  };
+  useEffect(() => {
+    getSearchHistoryFetch();
+    getMostLikeFetch();
+  }, []);
   return (
     <div className="discover-search-container">
-      <input className="discover-search" placeholder="搜索旅游攻略" />
-      <MdOutlineSearch className="discover-search-icon" />
+      <div className="discover-search">
+        <input
+          className="discover-search-input"
+          placeholder="搜索旅游攻略"
+          onFocus={() => setSearchContentShow(true)}
+          onChange={e => setSearchValue(e.target.value)}
+        />
+        {searchContentShow && (
+          <div className="discover-search-conetent">
+            <div className="discover-search-history">
+              <div>历史搜索：</div>
+              <div className="discover-search-history-content">
+                {searchHistory.map(item => {
+                  return (
+                    <div key={item} className="discover-search-content-item" onClick={searchContent(item)}>
+                      {item}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="discover-search-history">
+              <div>最热文章：</div>
+              <div className="discover-search-history-content">
+                {mostLike?.articles.map(item => {
+                  return (
+                    <div
+                      key={item.article_id}
+                      className="discover-search-content-item"
+                      onClick={toArticle(item.article_id)}
+                    >
+                      {item.content.title}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <MdOutlineSearch className="discover-search-icon" onClick={sendSearch} />
     </div>
   );
 };
@@ -356,68 +522,41 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
 };
 
 const DiscoverContent: FC = () => {
+  const param = useParams();
+  const [articleList, setArticleList] = useState<
+    {
+      article_id: string;
+      user: string;
+      content: string;
+    }[]
+  >();
+
+  const getArticlesFetch = async () => {
+    try {
+      const res = await fetchData<{
+        articles: {
+          article_id: string;
+          user: string;
+          content: string;
+        }[];
+      }>('GET', { url: '/api/articles/get-recommand-articles' });
+      if (res.code === 200) {
+        setArticleList(res.data.articles);
+      }
+    } catch (error) {
+      ErrorMessage('获取推荐文章失败', 2000);
+    }
+  };
+
+  useEffect(() => {
+    getArticlesFetch();
+  }, [param]);
   return (
     <div className="discover-content">
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
-      <PlanItem articleID="1" userName="1"></PlanItem>
+      {articleList &&
+        articleList.map(item => {
+          return <PlanItem key={item.article_id} articleID={item.article_id} userName={item.user} type="other" />;
+        })}
     </div>
   );
 };
