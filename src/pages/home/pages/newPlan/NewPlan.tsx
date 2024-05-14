@@ -10,12 +10,14 @@ import { fetchData } from '@myCommon/fetchData.ts';
 import { PopUps } from '@myComponents/PopUps/PopUps.tsx';
 import AMap from '@myComponents/AMap/Amap.tsx';
 import { useLoginState } from '@myHooks/useLoginState.ts';
+import { useNavigate } from 'react-router-dom';
 
 export function Component() {
   return <NewPlan></NewPlan>;
 }
 
 const NewPlan: FC = () => {
+  const navigate = useNavigate();
   useLoginState();
   const partItem: PartItemTypes = {
     title: '',
@@ -66,6 +68,8 @@ const NewPlan: FC = () => {
       );
       if (res.code === 200) {
         ErrorMessage('创建成功', 2000);
+        navigate('/home/me/production');
+
         return;
       }
     } catch (error) {

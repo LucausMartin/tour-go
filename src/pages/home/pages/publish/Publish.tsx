@@ -13,6 +13,7 @@ import { Uploader, type UploaderValueItem } from 'react-vant';
 import { ReactSetState } from '@myTypes/types.ts';
 import '../me/me.css';
 import '../../../login/login.css';
+import { useNavigate } from 'react-router-dom';
 
 export function Component() {
   return <Publish></Publish>;
@@ -138,6 +139,7 @@ const Plan: FC<{ plan: { plan_id: string; title: string }[] | []; emepty: boolea
     complate: number[];
   } | null>(null);
 
+  const navigator = useNavigate();
   const [coverImg, setCoverImg] = useState<string | null>(null);
   const [coverName, setCoverName] = useState<string | null>(null);
   const [title, setTitle] = useState<string | null>(null);
@@ -404,6 +406,7 @@ const Plan: FC<{ plan: { plan_id: string; title: string }[] | []; emepty: boolea
 
     if (res.code === 200) {
       ErrorMessage('发布成功', 2000);
+      navigator('/home/me/article');
     } else {
       ErrorMessage('发布失败', 2000);
     }
@@ -465,7 +468,9 @@ const Plan: FC<{ plan: { plan_id: string; title: string }[] | []; emepty: boolea
       plugins: [] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
     }).then(AMap => {
       const plan_id = plan[0] ? plan[0].plan_id : '';
+      // @ts-expect-error navigator is any
       navigator.geolocation.getCurrentPosition(
+        // @ts-expect-error pos is any
         async pos => {
           const res = await fetchData<
             {
@@ -534,6 +539,7 @@ const Plan: FC<{ plan: { plan_id: string; title: string }[] | []; emepty: boolea
             ErrorMessage('获取计划详情失败', 2000);
           }
         },
+        // @ts-expect-error err is any
         err => {
           console.log(err);
         },

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import './discover.css';
 import { MdOutlineSearch } from 'react-icons/md';
 import { Space } from '@myComponents/Space/Space.tsx';
@@ -9,11 +9,12 @@ import { useNavigate, useParams, Outlet } from 'react-router-dom';
 import { useMatchLocation } from '@myHooks/useMatchLocation.ts';
 import { MaskDialog } from '@myComponents/MaskDialog/MaskDialog.tsx';
 import { ErrorMessage } from '@myCommon/errorMessage.ts';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addMessage } from '@myStore/slices/messageSlice.ts';
 import { useLoginState } from '@myHooks/useLoginState.ts';
 import { PlanItem } from '@myComponents/PlanItem/PlanItem.tsx';
 import { fetchData } from '@myCommon/fetchData.ts';
+import { selectLogin } from '@myStore/slices/loginSlice.ts';
 
 // const a = [...new Array(29).keys()];
 // const webpPath = '/src/assets/img';
@@ -407,6 +408,7 @@ const DiscoverKind: FC = () => {
   const param = useParams();
   const scrollRef = useRef<HTMLDivElement>(null);
   const naivgate = useNavigate();
+  const loginState = useSelector(selectLogin);
 
   const changeKind = (kindKey: KindKeys) => {
     return () => {
@@ -417,7 +419,7 @@ const DiscoverKind: FC = () => {
   return (
     <div ref={scrollRef} className="discover-kind">
       {discoverKindList.map(item => {
-        return (
+        return item.key === 'follow' && loginState !== 'login' ? null : (
           <div
             key={item.key}
             onClick={changeKind(item.key)}
@@ -440,6 +442,7 @@ const DiscoverKind: FC = () => {
 const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ setSearchPageShow }) => {
   const location = useMatchLocation('articleKind');
   const naivgate = useNavigate();
+  const loginState = useSelector(selectLogin);
   const discoverKindListElementWidth = useRef<number>(0);
 
   useEffect(() => {
@@ -484,19 +487,21 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
             <div className="discover-top-bar-list-left-mask"></div>
           )
         ) : null}
-        {discoverKindList.map(item => (
-          <div
-            key={item.key}
-            className="discover-top-bar-list-item"
-            onClick={changeKind(item.key)}
-            style={{
-              fontWeight: location === item.key ? '600' : '',
-              color: location === item.key ? 'var(--active-font-color)' : ''
-            }}
-          >
-            {item.title}
-          </div>
-        ))}
+        {discoverKindList.map(item =>
+          item.key === 'follow' && loginState !== 'login' ? null : (
+            <div
+              key={item.key}
+              className="discover-top-bar-list-item"
+              onClick={changeKind(item.key)}
+              style={{
+                fontWeight: location === item.key ? '600' : '',
+                color: location === item.key ? 'var(--active-font-color)' : ''
+              }}
+            >
+              {item.title}
+            </div>
+          )
+        )}
         <div
           className="discover-top-bar-list-right-mask"
           style={{
@@ -523,6 +528,9 @@ const DiscoverTopBar: FC<{ setSearchPageShow: ReactSetState<boolean> }> = ({ set
 
 const DiscoverContent: FC = () => {
   const param = useParams();
+  const [page, setPage] = useState(1);
+  const [loadingShow, setLoadingShow] = useState(false);
+  const [over, setOver] = useState(false);
   const [articleList, setArticleList] = useState<
     {
       article_id: string;
@@ -531,7 +539,42 @@ const DiscoverContent: FC = () => {
     }[]
   >();
 
-  const getArticlesFetch = async () => {
+  const getArticlesFetch = useCallback(async (page: number) => {
+    try {
+      const res = await fetchData<
+        {
+          articles: {
+            article_id: string;
+            user: string;
+            content: string;
+          }[];
+          over?: boolean;
+        },
+        {
+          page: number;
+        }
+      >('POST', { url: '/api/articles/get-recommand-articles' }, { page });
+      if (res.code === 200) {
+        setArticleList(pre => {
+          if (pre) {
+            return pre.concat(res.data.articles);
+          } else {
+            return res.data.articles;
+          }
+        });
+        setPage(page + 1);
+        setLoadingShow(true);
+        if (res.data.over) {
+          setOver(true);
+        }
+      }
+    } catch (error) {
+      ErrorMessage('获取推荐文章失败', 2000);
+    }
+  }, []);
+
+  // 获取关注用户的文章
+  const getFollowArticlesFetch = useCallback(async () => {
     try {
       const res = await fetchData<{
         articles: {
@@ -539,24 +582,102 @@ const DiscoverContent: FC = () => {
           user: string;
           content: string;
         }[];
-      }>('GET', { url: '/api/articles/get-recommand-articles' });
+      }>('GET', { url: '/api/articles/get-follow-articles' });
       if (res.code === 200) {
         setArticleList(res.data.articles);
       }
     } catch (error) {
-      ErrorMessage('获取推荐文章失败', 2000);
+      ErrorMessage('获取关注用户的文章失败', 2000);
     }
-  };
+  }, []);
+
+  // 根据标签获取文章 POST
+  const getArticlesByTagFetch = useCallback(async () => {
+    try {
+      console.log(param.kind);
+      const res = await fetchData<
+        {
+          articles: {
+            article_id: string;
+            user: string;
+            content: string;
+          }[];
+        },
+        {
+          label: string;
+        }
+      >('POST', { url: '/api/articles/get-articles-by-label' }, { label: param.kind === undefined ? '' : param.kind });
+      if (res.code === 200) {
+        setArticleList(res.data.articles);
+      }
+    } catch (error) {
+      ErrorMessage('获取标签文章失败', 2000);
+    }
+  }, [param.kind]);
+
+  const [loading, setLoading] = useState('. ');
+
+  const loadingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    getArticlesFetch();
-  }, [param]);
+    // 如果出现在视口中，就加载数据
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setLoadingShow(false);
+          getArticlesFetch(page);
+        }
+      },
+      { threshold: 1 }
+    );
+    const currentLoadingRef = loadingRef.current;
+    if (currentLoadingRef) {
+      observer.observe(currentLoadingRef);
+    }
+    return () => {
+      if (currentLoadingRef) {
+        observer.unobserve(currentLoadingRef);
+      }
+    };
+  }, [page, getArticlesFetch]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLoading(loading => {
+        if (loading === '. . . ') {
+          return '. ';
+        } else {
+          return loading + '. ';
+        }
+      });
+    }, 500);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (param.kind === 'recommand') {
+      getArticlesFetch(1);
+    }
+    if (param.kind === 'follow') {
+      getFollowArticlesFetch();
+    }
+    if (param.kind !== 'recommand' && param.kind !== 'follow') {
+      getArticlesByTagFetch();
+    }
+  }, [param, param.kind, getArticlesFetch, getFollowArticlesFetch, getArticlesByTagFetch]);
   return (
     <div className="discover-content">
       {articleList &&
         articleList.map(item => {
           return <PlanItem key={item.article_id} articleID={item.article_id} userName={item.user} type="other" />;
         })}
+      {!over && loadingShow && (
+        <div ref={loadingRef} className="discover-loading">
+          Loading {loading}
+        </div>
+      )}
     </div>
   );
 };

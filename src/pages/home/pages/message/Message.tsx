@@ -70,7 +70,7 @@ export const Message: FC = () => {
 
   useEffect(() => {
     if (!param.kind || !messageKindList.find(item => item.key === param.kind)) {
-      navigate('comment');
+      navigate('fans');
     }
   }, [param.kind, navigate, messageState]);
   return (
